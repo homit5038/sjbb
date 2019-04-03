@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<!-- 自动扫描路径 -->
+	<context:component-scan base-package="com.xqx.frame.web" />
+
+	<!-- json转换器 -->
+	<annotation-driven>
+		<message-converters>
+			<!-- json -->
+			<beans:bean
+				class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+		</message-converters>
+
+		<!-- 分页参数 -->
+		<argument-resolvers>
+			<beans:bean
+				class="org.springframework.data.web.PageableHandlerMethodArgumentResolver">
+				<beans:property name="maxPageSize" value="100" />
+			</beans:bean>
+		</argument-resolvers>
+	</annotation-driven>
+
+
+	<!-- 静态资源 -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+
+	<!-- 文件上传解析器 -->
+	<beans:bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- one of the properties available; the maximum file size in bytes -->
+		<beans:property name="maxUploadSize" value="500000000" />
+	</beans:bean>
+
+	<!-- 配置文件 -->
+	<context:property-placeholder location="classpath:config.properties" />
+
+	<!-- 视图资源解析器，将视图名称映射到/WEB-INF/jsp下对应的文件 -->
+	<beans:bean id="viewResolver"
+		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<beans:property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<beans:property name="prefix" value="/WEB-INF/jsp/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+
+</beans:beans>
