@@ -95,7 +95,7 @@ public class chargeController {
 	public String addChargePay(HttpServletRequest request){
 		//payedinfoDao.save(choose);charge-real-pay
 		TUser user = (TUser) SecurityUtil.getCurrentUser();
-
+		Date now = new Date();
 		
 		BigDecimal shouldpay = new BigDecimal(request.getParameter("charge-should-pay"));
 		BigDecimal chargerealpay = new BigDecimal(request.getParameter("charge-real-pay"));
@@ -112,6 +112,8 @@ public class chargeController {
 		PayedInfo.setChargeshouldpay(shouldpay);
 		PayedInfo.setChargerealpay(chargerealpay);
 		PayedInfo.setUser(user);
+		PayedInfo.setPayableDsate(now);
+		PayedInfo.setTimeb(now);
 		PayedInfo.setChargConnection(chargConnection);
 		PayedInfo.setChargereturn(chargereturn);
 		PayedInfo.setChildren(children);

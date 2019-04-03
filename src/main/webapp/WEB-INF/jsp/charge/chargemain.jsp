@@ -71,7 +71,7 @@
 			<form id="chargemainFrom" action="${ctx}/charge/chargemain" method="post">
 				<input type="hidden" id="size" name="size" value="${size}"> 
 			    <input type="hidden" id="page" name="page" value="${page}">
-				<table>
+				<table border=0 width="100%">
 					<tr height="40px">
 						<td align="right" width="100px">姓名：</td>
 						<td align="left"><input type="text" name=childName value="${name}"
@@ -89,12 +89,13 @@
 						<button type="button" onclick="allv();" class="btn btn-warning" >选中</button>
 						</td>
 					</tr>
+	
 				</table>
 			</form>
 		</div>
 		<div class="panel-body">
-		<input type="text" id="childIdList">
-		<input type="text" id="chargeIdList">
+<!-- 		<input type="text" id="childIdList">
+		<input type="text" id="chargeIdList"> -->
 		
 			<table class="table table-bordered table-condensed" id="charge-item-table">
 				<c:choose>
@@ -125,31 +126,52 @@
 					</c:otherwise>
 				</c:choose>
 			</table>
-			<div class="col-md-12 charge-detail">
-               
-                   <span id="selected-kinder">
-                   张征睿</span>
-                   <input type="hidden" class="childId" > 2019年03月份 缴费详情
-                
-            </div>	
-			<div class="row">
-            <div class="col-md-12 charge-items text-center">
-                <form id="myform" class="form-inline">
+			
+	
+<div class="col-md-12 charge-detail"></div>	
+<form id="myform" class="form-inline">
+<div class="row">
+<div class="col-md-12 charge-items text-center">
+<span id="selected-kinder">张征睿</span><span id="datast"></span>月份 缴费详情 
+                        <label class="radio-inline"> <input id="display-all-items" type="checkbox">显示全部收费项 </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="radio-inline"> <input id="paytypeCash" class="paytype" value="1" type="radio" name="paytype" checked="checked">现金 </label>
+                        <label class="radio-inline"> <input id="paytypeCard" class="paytype" value="2" type="radio" name="paytype">刷卡 </label>
+                        <label class="radio-inline"> <input id="paytypeWet" class="paytype" value="3" type="radio" name="paytype">微信 </label>
+                        <label class="radio-inline"><input id="paytypePay" class="paytype" value="4" type="radio" name="paytype">支付宝 </label>
+                    </div> </div>
+
+<div class="row">
+<div class="col-md-12 charge-items text-center">
+  
+  
+  
+  
+                    <input type="hidden" class="childId" >
                     <input type="hidden" name="payStatus" value="CG">
                     <input type="hidden" id="favourable" name="favourable" value="0">
                     <input type="hidden" name="flowCode" id="flowCode" value="">
                     <input type="hidden" name="chargetype" id="chargingType" value="1">
                     <input type="hidden" name="childId" id="childId">
                     <input type="text" name="chargConnection" id="chargConnection" value="0">
-                    <input type="hidden" id="paytype" name="paytype" value="1">
+                    
+			
+			
+				
+                    
+                    
                     <span>应收&nbsp;&nbsp;<input type="text" id="shouldpay" readonly="" name="charge-should-pay" class="form-control charge-input" value="0"></span>
                     <span>实收&nbsp;&nbsp; <input type="text" id="realpay" name="charge-real-pay" class="form-control charge-input" value="0"></span>
                     <span>找零&nbsp;&nbsp; <input type="text" id="returnpay" readonly="" name="charge-return" class="form-control charge-input" value="0"></span>
                     <span>备注&nbsp;&nbsp; <input type="text" id="bz" name="bz" class="form-control charge-input"></span>
                     <span><input id="doCharge" type="button" class="btn btn-warning" value="缴费打印"></span>
-                </form>
+
+
             </div>
         </div>
+        
+         </form>
+        
 			<table class="table table-bordered table-condensed" id="contoned"></table>
 			<table class="table table-bordered table-condensed" id="kinder-list-table">
 				<c:choose>

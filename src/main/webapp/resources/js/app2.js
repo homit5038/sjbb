@@ -7,6 +7,10 @@ else {
     //竖版打印机
     var printBillType = 0;
 }
+//var myDate = new Date();
+//var getFullYear=myDate.getFullYear(); 
+//var datast=getFullYear+"-"+myDate.getMonth()
+$("#datast").html(getTime());
 $(function () {
 	
 	$("#childId").val("")
@@ -183,9 +187,7 @@ function kinderlist(x){
   	  });
 	return lists;
 }
-allshow=function(){
- $("#kinder-list-table tr:not(:first)").removeClass("hidden");
-} 
+
 
 function connected(id){
 	// jQuery('#contoned').html("loading...")
@@ -241,11 +243,17 @@ function connected(id){
 	
 }
 
+
+$(document).on('click', "#display-all-items", function () {
+	 $("#kinder-list-table tr:not(:first)").removeClass("hidden");
+})
+
+
 $(document).on('click', "#doCharge", function () {
 	 var doflag = true;
 	
     if (doflag) {
-    
+    	var chargConnection=$("#chargConnection").val()
         var shouldpay = parseFloat($("#shouldpay").val());
         var realpay = parseFloat($("#realpay").val());
         var childId = $("#childId").val()
@@ -256,6 +264,10 @@ $(document).on('click', "#doCharge", function () {
        // alert(childId)
        if (!childId) {
             bootbox.alert("请先选择孩子！");
+            return false;
+        }
+       if (!chargConnection) {
+            bootbox.alert("请选择收费项！");
             return false;
         }
         
