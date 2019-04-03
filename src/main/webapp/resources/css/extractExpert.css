@@ -1,0 +1,67 @@
+.panel-heading .panel-title span.left {
+	margin-right: 30px;
+	color: black;
+}
+
+.expert-list{
+    position: relative;
+    text-align:center; 
+	display: inline-block;	
+}
+
+.expert-list ul li{
+	list-style-type: none;
+	float: left;
+}
+
+.expert-list  ul .expert-view {
+	padding: 4px;
+	width: 210px;
+}
+
+.expert-view .expert-content{
+	border-radius: 6px;
+	margin-left : 6px;
+	margin-bottom: 6px;
+	padding: 2px;
+}
+
+.equired1 {
+	border: 2px solid red;
+}
+
+.equired0 {
+	border: 1px solid gray;
+}
+
+.icoFontlist:hover {
+	width: 225px;
+	font-size: 12px;
+	border: 0px solid #ddd;
+	overflow: hidden;
+	text-align: left;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	color: blue;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.icoFontlist {
+	width: 225px;
+	font-size: 12px;
+	border: 0px solid #ddd;
+	color: #5f5f5f;
+	overflow: hidden;
+	text-align: left;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.btn-danger{
+	margin:2px;
+}
+
+.expert-list  ul .expert-view .expert-content h5{
+	color: green;
+}

@@ -1,0 +1,142 @@
+.contained h1
+.contained h2 {
+  text-align: center;
+  height: 100px;
+  line-height: 90px;
+}
+
+.contained h3 {
+  text-align: center;
+  height: 100px;  
+  margin: 5px;
+  padding: 0px
+}
+.contained{
+   width: 680px;
+   margin: 10px auto;
+   font-size: 20px;
+}
+
+.contained .jianzh {
+  position: relative;
+  width: 310px;
+  margin: 0 auto;
+  font-family: KaiTi_GB2312;
+}
+
+.contained .jianzh strong {
+  position: absolute;
+  top:40px;
+  right: 20px;
+
+}
+
+.contained .shfwb {
+  text-align: center;
+}
+
+.contained p {
+    margin: 20px 0;
+    line-height:40px;
+  overflow: hidden;
+  
+}
+
+.contained .multi-text {
+  display: inline;
+  padding: 5px 20px;
+  line-height: 32px;
+}
+
+.contained .dy {
+  margin: 50px auto;
+
+}
+
+.contained .der {
+  margin: 50px auto;
+
+}
+
+.contained .ds {
+  margin: 50px auto;
+
+}
+
+.contained span {
+  display: inline-block;
+  border-bottom: 1px black solid;
+  height: 32px;
+  line-height: 32px;
+  margin-right: 5px;
+
+}
+
+.contained .dlsj {
+  text-indent: 2em;
+}
+
+.contained .fm {
+  text-align: center;
+  margin: 100px auto;
+}
+
+.contained .fm p {
+  height: 500px;
+}
+
+.contained .spaces {
+ border-bottom: 0px black solid;
+  width: 50px;
+}
+
+.contained .space200 {
+ border-bottom: 0px black solid;
+  width: 200px;
+}
+
+.contained .pdh {
+   height: 100px;
+}
+
+.pon{
+  border-width: 0;
+  position: absolute;
+}
+
+.contained .tdcon {
+  position: relative;
+
+}
+
+.contained table.altrowstable {
+  width: 100%;
+  margin-top: 10px;
+  color:#000;
+  border-width: 1px;
+  border-color: #000;
+  border-collapse: collapse;
+}
+
+.contained table.altrowstable th {
+  border-width: 1px;
+  padding: 8px;
+  border-style: solid;
+  border-color: #000;
+}
+
+.contained table.altrowstable td {
+  text-align: center;
+  border-width: 1px;
+  padding: 8px;
+  border-style: solid;
+  border-color: #000;
+}
+
+.contained .oddrowcolor {
+background-color:#d4e3e5;
+}
+
+.contained .evenrowcolor {
+background-color:#c3dde0;
+}

@@ -1,0 +1,758 @@
+﻿/* @teaware 2015-09 */
+
+.h_msg .input_msg{
+	display: none;
+}
+.input_msg {
+    color: #aaaaaa;
+    line-height: 34px;
+    padding-left: 8px;
+    position: absolute;
+}
+
+/*必填项 错误提示信息 所用颜色 #db2828 */
+.login-tip{
+	display: none;
+}
+.required>label:after,
+.required .checkbox:after {
+    margin: -0.2em 0 0 0.2em;
+    content: '*';
+    color: #db2828;
+    font-weight: bold;
+}
+
+.error {
+    color: #db2828;
+    font-weight: normal;
+    font-size: 0.7em;
+}
+
+
+.am-footer table {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.am-footer td {
+    padding: 0 5px;
+    text-align: center;
+    color: #666;
+}
+
+.am-footer td span {
+    margin: 0 5px;
+}
+
+/* added by teaware on Sep 18 2015*/
+.login-bg {
+    background-image: url(images/login.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.keeploged {
+    vertical-align: top;
+    margin: 3px 2px 0 0;
+}
+.footer-list li dt {
+    font-family: "SimHei", "Microsoft YaHei", Helvetica, Arial;
+    margin-bottom: 25px;
+}
+/* 取消hover效果 */
+.am-nav>li>a:focus, .am-nav>li>a:hover {
+    background-color: transparent;
+}
+
+.login-tip {
+    border: 1px solid #dcb5a9;
+    border-radius: 5px;
+    background-color: #efd5cf;
+    padding: 10px;
+    font-size: 12px;
+    margin-bottom:20px;
+}
+.login-tip .warning {
+
+}
+.appform div.am-u-sm-12{
+	margin-bottom: 10px;
+}
+
+.appform div.am-u-sm-13{
+	margin-bottom: 10px;
+}
+
+/*add by yuzhou  */ 
+ 
+.footer-infos{
+background-color: #eee
+}
+.footer-infos dl{ 
+    float: left;
+    height: 105px;
+    margin-top: 35px;
+    margin-bottom: 35px;
+    text-align: left;
+    padding-left: 20px;
+    border-left: 1px solid #bbb;
+}  
+.am-footer a,.footer-infos a{
+    color: #000;
+    font-size: 14px;
+}
+.am-footer .footer-infos dl dt{
+    margin-bottom: 30px; 
+}
+
+a { 
+    white-space: nowrap;
+}
+.mb-10{
+    margin-bottom: 10px;
+}
+.h-120 {
+    height: 120px;
+}
+.h-400 {
+    height: 400px;
+}
+
+.h-600 {
+    height: 550px;
+    position: relative;
+}
+.minheight-400 {
+    min-height: 400px;
+}
+
+.minheight-700 {
+    min-height: 700px;
+}
+.singupbody {
+    background-color: #eee;
+}
+.singupcontainer{
+    min-height: 500px;
+    padding: 20px;
+    margin-top: 20px;
+}
+.am-nav>li>a {
+    font-size: 16px;
+}
+
+.active {
+    color: #fff;
+    background-color: #0099e2;
+}
+
+
+.app-topbar {
+    width: 100%;
+    height: 80px;
+    padding: 15px 0;
+    margin-bottom: 0 !important;
+    background-color: #fff; 
+    border-bottom: none;
+}
+
+.headerlogo {
+    display: block;
+    float: left;
+    height: 100%;
+    width: 195px;
+    background: url(https://zjszf.oss-cn-hangzhou.aliyuncs.com/sso/images/logo.png) left center no-repeat;
+}
+
+.headtag {
+    display: block;
+    float: left;
+    line-height: 18px;
+    height: 20px;
+    padding: 0 0 0 10px;
+    border-left: 2px solid #999;
+    margin: 12px 0 0 5px;
+}
+
+.signprocess { 
+    width: 725px;
+}
+
+.rectangle {
+    position: relative;
+    width: 200px;
+    text-align: center;
+    line-height: 40px;
+    display: block;
+    float: left;
+    height: 40px;
+    background-color: #d5d5d5;
+}
+
+.signprocess2 .rectangle {
+    width: 322px;
+}
+
+.rectangle.active {
+    color: #fff;
+    background-color: #0099e2;
+}
+
+.rectangle-sm {
+    width: 135px;
+}
+
+.right-move {
+    margin-left: 42px;
+}
+
+.active .triangle {
+    border-color: transparent transparent transparent #0099e2;
+}
+
+.active .triangle-cave {
+    border-color: #0099e2 #0099e2 #0099e2 transparent;
+}
+
+.triangle {
+    position: absolute;
+    right: -40px;
+    top: 0;
+    display: block;
+    width: 0;
+    height: 0;
+    border-width: 20px;
+    border-style: dashed dashed dashed solid;
+    border-color: transparent transparent transparent #d5d5d5;
+}
+
+.triangle-cave {
+    position: absolute;
+    left: -40px;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-width: 20px;
+    border-style: solid solid solid dashed;
+    border-color: #d5d5d5 #d5d5d5 #d5d5d5 transparent;
+}
+
+.personal-body .app-topbar {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.personal-header {
+    /*background: url(../images/banner.jpg);*/
+    background-image: url(https://zjszf.oss-cn-hangzhou.aliyuncs.com/sso/assets/images/top_bar.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 10px 0;
+}
+
+.personal-header {
+    color: #fff;
+}
+.personal-header img{
+    float: left;
+    margin-right: 20px
+}
+.personal-header .am-btn-xs{
+    background-color:#f19e00;
+    border-color: #f19e00;
+}
+
+.personal-photo {
+    width: 70px;
+    height: 70px;
+}
+
+.personal-profile {
+    width: auto;
+    display: inline-block !important;
+    display: inline;
+    border-top: 1px dotted #fff;
+    padding-top: 5px;
+    font-size: 14px;
+}
+
+.personal-profile span {
+    margin-right: 8px;
+}
+.personal-profile span:last-child {
+    margin-right: 0;
+}
+.personal-main{ 
+} 
+.personal-left {  
+    background-color: #eee;
+    min-height: 540px;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.personal-left .am-panel-bd{
+    padding : 0; 
+}
+.personal-left a{
+    position: absolute;
+    left: 0;
+    right: 0;
+    color: inherit;
+    text-align: left;
+    padding-left: 35px;
+}
+.personal-left ul {
+    width: 100%;
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+    text-align: center;
+}
+.personal-left ul li{
+    position: relative;
+    height: 45px;
+    line-height: 45px;
+} 
+.personal-left ul li:hover{
+    cursor: pointer;
+    color: #fff;
+    background-color: #0099e2;
+}
+.personal-left ul li span {
+    font-weight: normal;
+    position: absolute;
+    right: 18px;
+    font-size: 1.2em;
+}
+.personal-left ul li i {
+    font-style: normal;
+    position: absolute;
+    right: 36px;
+    top: 6px;
+}
+.personal-right{
+    background-color: #fff;
+}
+.personal-right ul li>div{
+    height:40px;
+    line-height: 40px;
+}
+.personal-right ul li>div>span:last-child{
+    text-align: right;
+}
+.personal-info li>div>span:first-child{
+    text-align: right;
+    padding-right: 70px;
+}
+.loginbody{
+   position: absolute; 
+    margin-left: -800px;
+    left: 50%;
+}
+.loginform {
+    width: 340px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    margin-top: -220px;
+}
+.loginform .am-tabs-nav li a{
+  width: 170px;
+  height: 40px;
+  line-height: 40px;
+  padding: 0;
+  font-size: 16px;
+  background-color: #f0f7fd;
+  color:#999;
+  text-align: center;
+  margin-right: 0;
+}
+.loginform .am-tabs-nav li.am-active a{
+  background-color: #f0f7fd;
+  color: #333;
+}
+.am-lit {
+  font-weight: normal;
+  font-size: .8em;
+  line-height: 25px;
+}
+.loginform .am-tabs-bd{
+  background-color: #f0f7fd;
+  height:400px;
+}
+.loginform .registerbtn{
+  position:relative;
+  border-top: 2px dashed #d9d9d9;
+  height: 50px;
+} 
+.qrdiv {
+    margin-top: 0px;
+    float: left;
+    padding-top: 35px;
+    margin-bottom: 35px;
+    text-align: left;
+}
+.qrdiv h3 {
+    margin-bottom: 10px;
+    font-family: "SimHei", "Microsoft YaHei", Helvetica, Arial;
+}
+.qrdiv img {
+    margin-right: 10px;
+}
+.qrdiv .downloadbtn{
+    width: 100px;
+    float: left;
+    margin-top: 12px;
+}
+.qrdiv .downloadbtn button {
+    margin-top: 8px;
+}
+.warn-level{
+    height: 20px;
+    margin-top: 5px;
+    line-height: 5px;
+}
+.am-list-static .ht-50{
+    height: 40px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    line-height: 18px;
+}
+.text-warning{
+    color: #ffc900;
+}
+.lt-line{
+    min-height: 36px;
+    border-left: 2px solid #ededed;
+}
+.no-bm-line{
+    border-bottom: none !important;
+}
+.no-tp-line{
+    border-top: none !important;
+}
+.icon-checkd{
+    height: 45px;
+    line-height: 45px;
+    padding-left: 65px;
+    padding-top: 10px;
+    padding-bottom: 15px; 
+    background:  url(../images/checked.jpg)  no-repeat;
+}
+.icon-uncheckd{
+    height: 45px;
+    line-height: 45px;
+    padding-left: 65px;
+    padding-top: 10px;
+    padding-bottom: 15px; 
+    background:  url(https://zjszf.oss-cn-hangzhou.aliyuncs.com/sso/assets/images/unchecked.png)  no-repeat;
+}  
+.panelhoverarea .am-panel:hover{
+    background-color: #eee;
+
+}
+
+.am-border-danger{
+    border-color:#DE5D57;
+}
+.am-back-danger{
+    background-color:#FBCCCA;
+}
+.gray { 
+-webkit-filter: grayscale(100%); 
+-moz-filter: grayscale(100%); 
+-ms-filter: grayscale(100%); 
+-o-filter: grayscale(100%); 
+filter: grayscale(100%); 
+filter: gray; 
+}
+
+/*实名认证 icon*/
+.confirm-icon {
+    background: url(https://zjszf.oss-cn-hangzhou.aliyuncs.com/sso/assets/images/id.png) left center no-repeat;
+    padding-left: 65px;
+}
+.confirm-icon h2 {
+  margin-bottom: 0;
+}
+.confirm-id {
+	background-image: url(https://zjszf.oss-cn-hangzhou.aliyuncs.com/sso/images/m_sfzrz.png);
+	background-position: 0px 40px;
+}
+.confirm-alipay {
+    background-image: url(https://zjszf.oss-cn-hangzhou.aliyuncs.com/sso/images/m_zfb.png);
+}
+.confirm-mail {
+    background-image: url(https://zjszf.oss-cn-hangzhou.aliyuncs.com/sso/assets/images/mail.png);
+}
+.confirm-social-security {
+    background-image: url(https://zjszf.oss-cn-hangzhou.aliyuncs.com/sso/assets/images/s_security.png);
+}
+.confirm-location {
+    background-image: url(https://zjszf.oss-cn-hangzhou.aliyuncs.com/sso/images/m_xcrz.png);
+}
+.confirm-face {
+    background-image: url(https://zjszf.oss-cn-hangzhou.aliyuncs.com/sso/images/m_srrz.png);
+}
+
+.id-round, .phone-round {
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.id-round {
+    background-image: url(https://zjszf.oss-cn-hangzhou.aliyuncs.com/sso/assets/images/id_round.png);
+}
+.phone-round {
+    background-image: url(https://zjszf.oss-cn-hangzhou.aliyuncs.com/sso/assets/images/phone_round.png);
+}
+
+.h-500 {
+    min-height: 500px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.am-topbar-brand {
+    padding: 0;
+}
+
+/*user center topbar added on Oct 9th 2015*/
+.uc-main {
+    min-width: 1000px;
+}
+.uc-topbar {
+    height: 148px;
+    padding: 5px 0 0;
+    background-image: url(https://zjszf.oss-cn-hangzhou.aliyuncs.com/sso/assets/images/top_bg.jpg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.uc-topbar .am-nav-border li {
+    line-height: 1;
+    padding: 0 1em;
+    border-right: 1px solid #999;
+    margin: .8em 0;
+    color: #1d1d1d;
+}
+.uc-topbar .am-nav-border li a {
+    color: #1d1d1d;
+    padding: 0;
+    display: inline-block;
+}
+.uc-topbar .am-nav-border li:last-child {
+    border-right: 0;
+}
+.uc-topbar .headerlogo {
+    background-image: url(https://zjszf.oss-cn-hangzhou.aliyuncs.com/sso/assets/images/zw_logo.png);
+}
+.am-dark {
+    background-color: rgba(0,0,0,0.2);
+    margin-top: 5px;
+}
+.am-navdrop>li>a {
+    color: #fff;
+    padding: 0 32px;
+    height: 87px;
+    line-height: 87px;
+}
+.am-navdrop>li.am-active>a, .am-navdrop>li.am-active>a:focus, .am-navdrop>li.am-active>a:hover {
+    color: #fff;
+    background-color: rgba(0,0,0,0.5);
+    cursor: default
+}
+.am-navdrop .am-dropdown-content:after, .am-navdrop .am-dropdown-content:before {
+    display: none;
+}
+.am-navdrop .am-dropdown-content {
+    min-width: 109.547px;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    background-color: #42484c;
+}
+.am-navdrop ul.am-dropdown-content>li>a {
+	font-size: 13px;
+    font-size: 1.3rem;
+    padding: 8px 20px;
+    color: #fff;
+}
+.am-navdrop ul.am-dropdown-content>li>a:focus, .am-navdrop ul.am-dropdown-content>li>a:hover {
+    text-decoration: none;
+    background-color: #272a2d;
+}
+.am-navdrop ul.am-dropdown-content>.am-active>a, .am-navdrop ul.am-dropdown-content>.am-active>a:focus, .am-navdrop ul.am-dropdown-content>.am-active>a:hover {
+    color: #fff;
+    text-decoration: none;
+    outline: 0;
+    background-color: #272a2d;
+}
+
+.grid {
+    box-shadow: 0 0 10px rgba(205, 206, 210, .9);
+    padding: 5px 0;
+}
+.grid .hd {
+    line-height: 20px;
+    padding: 0 10px 0 0;
+    margin: 5px 0;
+}
+.grid h3 {
+    display: inline-block;
+    padding-left: 12px;
+    border-left: 2px solid #fe8f13;
+    margin: 0;
+    font-weight: 500;
+}
+.grid .hd a {
+    font-size: 14px;
+}
+.grid .bd {
+    padding: 14px 25px;
+    border-top: 1px solid #eee;
+}
+.account {
+    margin: 0 12px 12px 0;
+}
+.account .bd ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+}
+.account .bd li {
+    margin: 3px 0;
+}
+.account .bd li a {
+    float: right;
+}
+.account .bd li .safety {
+    float: none;
+}
+.safety img {
+    margin-left: 5px;
+}
+.u-info {
+    padding: 5px 25px;
+    background-color: #028dc8;
+    color: #fff;
+}
+.u-info img {
+    width: 52px;
+    height: 52px;
+    float: left;
+    margin-right: 15px;
+}
+.u-info .personal-profile {
+    border: none;
+}
+.news {
+    margin: 0 12px 0 0;
+}
+
+.service {
+ margin: 0 12px 12px 0;
+}
+.service .bd {
+    padding: 20px 22px;
+}
+.service .item {
+    display: inline-block;
+    float: left;
+    width: 90px;
+    text-align: center;
+    font-size: 12px;
+    margin: 10px 0;
+}
+.service .item a {
+    color: #333;
+}
+.service .item img {
+    height: 34px;
+    margin-bottom: 4px;
+}
+.service .item span {
+    display: block;
+}
+.weather {
+    text-align: center;
+}
+.stat {
+    padding-bottom: 0;
+}
+.stat a {
+    color: #333;
+}
+.stat .bd {
+    padding: 18px 0 0;
+}
+.stat .am-tabs-bd .am-tab-panel {
+    padding: 0;
+}
+
+.user-tb {
+    margin-top: 20px;
+}
+.pagi ul {
+    text-align: center;
+}
+
+.new-panel {
+    padding: 30px 100px;
+    border: 1px solid #eee;
+    box-shadow: 0 0 5px rgba(0,0,0,.2);
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.new-panel .am-list>li:first-child {
+    border-top-width: 0;
+}
+.l-padding {
+    padding-top: 60px;
+    padding-bottom: 120px;
+}
+
+.am-modal-dialog {
+    background-color: #fff;
+}
+.am-modal-bd .user img {
+    width: 50px;
+    margin-right: 10px;
+}
+.am-modal-bd p {
+    margin: 10px 0;
+}
+.am-modal-bd .am-btn {
+    padding: 5px 32px;
+}
+.am-modal-bd .am-mg {
+    margin: 10px 0
+}
+span.phone {
+    font-size: 24px;
+    color: #999;
+}
+
+.sub-tip {
+    border-top: 1px dashed #ccc;
+    margin-top: 10px;
+}
+.sub-tip h4 {
+    font-weight: normal;
+    margin: 10px 0;
+}
+.sub-tip ul {
+    font-size: 14px;
+    padding-left: 16px;
+    margin: 0;
+}
+
+.formErrorContent{
+	color: red;
+	font-size: 13px;
+	
+}
