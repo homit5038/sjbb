@@ -3,6 +3,7 @@ package com.xqx.frame.web.controller;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,6 +37,8 @@ import com.xqx.frame.dao.TClasseDao;
 import com.xqx.frame.dao.TPayedInfoDao;
 import com.xqx.frame.dao.TchargeItemDao;
 import com.xqx.frame.exception.ParameterCheckException;
+import com.xqx.frame.form.PageQueryResult;
+import com.xqx.frame.form.QueryResult;
 import com.xqx.frame.model.SexType;
 import com.xqx.frame.model.TChargeItem;
 import com.xqx.frame.model.TChildren;
@@ -44,10 +47,12 @@ import com.xqx.frame.model.TEmploye;
 import com.xqx.frame.model.TGrade;
 import com.xqx.frame.model.TPayedInfo;
 import com.xqx.frame.model.TUser;
+import com.xqx.frame.model.query.employeQuery;
 import com.xqx.frame.security.SecurityUtil;
 import com.xqx.frame.service.ChildrenService;
 import com.xqx.frame.service.FileService;
 import com.xqx.frame.service.GradeService;
+import com.xqx.frame.service.TPayedInfoService;
 
 @Controller
 @RequestMapping("/charge")
@@ -60,6 +65,8 @@ public class chargeController {
 	TChildrenDao childrenDao;
 	@Autowired
 	TPayedInfoDao payedinfoDao;
+	@Autowired
+	TPayedInfoService payedinfoservice;
 	@Autowired
 	TClasseDao classesService;
 	@Autowired
@@ -86,6 +93,29 @@ public class chargeController {
 		m.addAttribute("Itemlist", Itemlist);
 		return "/charge/chargemain";
 	}
+
+	@ResponseBody
+	@RequestMapping(value = "/findChildHistory", method = RequestMethod.GET)
+	public List<TPayedInfo> findChildHistory(HttpServletRequest request){
+		Long childId = Long.valueOf(request.getParameter("childId"));
+		
+		System.out.print("==========================");
+		
+		
+		List<TPayedInfo> infolist = payedinfoservice.findTPayedInfoByupdateUserID(childId);
+		return infolist;
+
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 

@@ -107,10 +107,14 @@ $(document).on('click', '#charge-item-table tr:not(:first)', function () {
 	  //查询缴费历史
         var weChatIsSet=$("#weChatIsSet").val();
         var alipayIsSet=$("#alipayIsSet").val();
+        
+        
+        
         jQuery.ajax({
-            url: 'findChildHistoryInfoByChildId',
-            data: 'childId=' + childId,
-            method: 'post',
+            url: 'findChildHistory',
+           // data: 'childId=1' + $("#childId").val(),
+            data: 'childId=1',
+            method: 'get',
             dataType: 'json',
             success: function (data) {
                 $("#table-charge-history tr:not(.table-head)").remove();
