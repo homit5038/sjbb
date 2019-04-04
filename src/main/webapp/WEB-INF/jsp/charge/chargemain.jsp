@@ -5,6 +5,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
+<!DOCTYPE html>
 <html>
 <head>
 <jsp:include page="/WEB-INF/jsp/public/header.jsp"></jsp:include>
@@ -63,6 +64,209 @@
 </head>
 <body id="main">
 	<pre>班级>班级列表</pre>
+	
+	
+	<div id="wrap" style="display: none">
+        <div id="bill">
+            
+                <div class="billlogo">
+                    <img src="/upload/895E5A06B39140E09585D078E462B32F_zip.png"/>
+                </div>
+            
+            <p class="kindergarden-name">
+                    育英三幼
+            </p>
+            
+                <p class="telphone">电话：123456789</p>
+            
+            <table class="total-list">
+                <tr>
+                    <th>姓名：</th>
+                    <td><span id="kidName"></span></td>
+                </tr>
+                <tr>
+                    <th>班级：</th>
+                    <td><span id="kidClass"></span></td>
+                </tr>
+                
+                    <tr>
+                        <th>学号：</th>
+                        <td><span id="kidNum"></span></td>
+                    </tr>
+                
+                
+                    <tr>
+                        <th>考勤天数：</th>
+                        <td><span id="kidAttend"></span></td>
+                    </tr>
+                
+            </table>
+            <p>************************</p>
+            <div>
+                <table id="printtable">
+                    <tr class="firsttr">
+                        <th>收费项目</th>
+                        <th>金额</th>
+                    </tr>
+
+                </table>
+            </div>
+            <p>************************</p>
+            <table class="total-list">
+                <tr>
+                    <th><b>总金额</b>：</th>
+                    <td><span id="kidTotalMoney"></span>元</td>
+                </tr>
+                <tr>
+                    <th><b>打印日期</b>：</th>
+                    <td><span id="kidTime"></span></td>
+                </tr>
+                
+                <tr>
+                    <th><b>缴费月份</b>：</th>
+                    <td><span id="payTime">2019年04月</span></td>
+                </tr>
+                
+                <tr>
+                    <th><b>应收</b>：</th>
+                    <td><span id="kidShouldMoney"></span>元</td>
+                </tr>
+                <tr>
+                    <th><b>实收</b>：</th>
+                    <td><span id="kidRealMoney"></span>元</td>
+                </tr>
+                <tr>
+                    <th><b>找零</b>：</th>
+                    <td><span id="kidReturnMoney"></span>元</td>
+                </tr>
+                <tr>
+                    <th><b>收款人</b>：</th>
+                    <td>园长</td>
+                </tr>
+                
+                    <tr>
+                        <th><b>小票号</b>：</th>
+                        <td><span id="kidFlowCode"></span></td>
+                    </tr>
+                
+                <tr>
+                    <th><b>缴费方式</b>：</th>
+                    <td><span id="kidPaytype"></span></td>
+                </tr>
+            </table>
+            <p>************************</p>
+            <p>备注：<span id="kidBz"></span></p>
+            
+                <p>通知：<span id="kidNotice">收费凭据</span></p>
+            
+            
+        </div>
+    </div>
+
+    <!-- 补打小票 -->
+    <div id="wrapb" style="display:none;">
+        <div id="bill">
+            
+                <div class="billlogo">
+                    <img src="/upload/895E5A06B39140E09585D078E462B32F_zip.png"/>
+                </div>
+            
+            <h1 class="kindergarden-name">
+                    育英三幼
+            </h1>
+            
+                <h3>电话：123456789</h3>
+            
+            <table class="total-list">
+                <tr>
+                    <th>姓名：</th>
+                    <td><span id="kidNameb"></span></td>
+                </tr>
+                <tr>
+                    <th>班级：</th>
+                    <td><span id="kidClassb"></span></td>
+                </tr>
+                
+                    <tr>
+                        <th>学号：</th>
+                        <td><span id="kidNumb"></span></td>
+                    </tr>
+                
+                
+                    <tr>
+                        <th>考勤天数：</th>
+                        <td><span id="kidAttendb"></span></td>
+                    </tr>
+                
+            </table>
+            <p>************************</p>
+            <div>
+                <table id="printtableb">
+                    <tr class="firsttr">
+                        <th>收费项目</th>
+                        <th>金额</th>
+                    </tr>
+
+                </table>
+            </div>
+            <p>************************</p>
+            <table class="total-list">
+                <tr>
+                    <th><b>总金额</b>：</th>
+                    <td><span id="kidTotalMoneyb"></span>元</td>
+                </tr>
+                <tr>
+                    <th><b>打印日期</b>：</th>
+                    <td><span id="kidTimeb"></span></td>
+                </tr>
+                
+                <tr>
+                    <th><b>缴费月份</b>：</th>
+                    <td><span id="kidPayableDate"></span></td>
+                </tr>
+                
+                <tr>
+                    <th><b>应收</b>：</th>
+                    <td><span id="kidShouldMoneyb"></span>元</td>
+                </tr>
+                <tr>
+                    <th><b>实收</b>：</th>
+                    <td><span id="kidRealMoneyb"></span>元</td>
+                </tr>
+                <tr>
+                    <th><b>收款人</b>：</th>
+                    <td><span id="kidUsernameb"></span></td>
+                </tr>
+                
+                    <tr>
+                        <th><b>小票号</b>：</th>
+                        <td><span id="kidFlowCodeb"></span></td>
+                    </tr>
+                
+                <tr>
+                    <th><b>缴费方式</b>：</th>
+                    <td><span id="kidPaytypeb"></span></td>
+                </tr>
+            </table>
+            <p>************************</p>
+            <p>备注：<span id="kidBzb"></span></p>
+            
+                <p>通知：<span id="kidNoticeb">收费凭据</span></p>
+            
+            
+        </div>
+    </div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	<div class="panel panel-info" style="width: 99%">
 		<div class="panel-heading">
 		<input type="hidden" id="printerWidth" value="58" />
@@ -81,7 +285,7 @@
 						
 						<td align="left" >
 							<button class="btn btn-primary" type="button" id="submitBtn" onclick="submitForm()">查询</button>
-							<input type="button" onclick="rese()"value="清空" class="btn btn-default">
+							<input type="button" onclick="rese()" value="清空" class="btn btn-default">
 						
 						    <input type="button" onclick="addem()"	value="添加班级" class="btn btn-default">
 							<button type="button" onclick="startConnect();" class="btn btn-warning" >覆盖关联</button>
@@ -114,8 +318,8 @@
 						</thead>
 						<c:forEach items="${lists}" var="data">
 							 <tr  data-id="${data.id}">
-							<td class="childId" data-id="${data.chargConnection}">
-							${data.childName}
+							<td  class="childId" data-id="${data.chargConnection}">
+							<span class="kinderName">${data.childName}</span>
 							<%-- <input type="hidden" class="childId" value="${data.id}"> --%>
 							</td>
 							<td>${data.parentPhoneNumber}</td>
@@ -153,6 +357,7 @@
                     <input type="hidden" name="flowCode" id="flowCode" value="">
                     <input type="hidden" name="chargetype" id="chargingType" value="1">
                     <input type="hidden" name="childId" id="childId">
+                
                     <input type="text" name="chargConnection" id="chargConnection" value="0">
                     
 			
@@ -196,6 +401,7 @@
 								<td>${data.itemName}</td>
 							    <td>${data.amount}
 							   <input type="hidden" class="charge-amount" value="${data.amount}">
+							       <input type="hidden" class="print-group" value="1">
 							    </td>
 								 <td>${data.periodic.displayName}</td>
 								 <td>${data.ticketLevel.displayName}</td>
@@ -204,6 +410,23 @@
 					</c:otherwise>
 				</c:choose>
 			</table>	
+			
+			<div class="row" style="min-height:107px;height: 107px; overflow: auto; width: 100%">
+            <table id="table-charge-history" class="table table-bordered table-condensed-mine text-center">
+                <thead>
+                <tr class="table-head">
+                    <th width="20%">小票号</th>
+                    <th width="20%">缴费金额（元）</th>
+                    <th width="20%">缴费时间</th>
+                    <th width="20%">缴费方式</th>
+                    <th width="20%">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+			
 			
 		</div>
 	</div>

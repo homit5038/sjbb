@@ -52,8 +52,13 @@ $(document).on('click', '#kinder-list-table input[type=checkbox]', function (e) 
        
         chargeCount();
     });
+    
+    
+    
+    
 //收费项表格，点击行即选中本行
 $(document).on('click', '#charge-item-table tr:not(:first)', function () {
+
 	var thist=$(this)
 	thist.addClass("active").siblings("tr").removeClass("active")
 	//	$('#kinder-list-table tr').empty(); 
@@ -96,7 +101,109 @@ $(document).on('click', '#charge-item-table tr:not(:first)', function () {
 	//allv()
 	chargeCount()
 	//connected($(this).attr("data-id"))
+	
+	
+	
+	  //查询缴费历史
+        var weChatIsSet=$("#weChatIsSet").val();
+        var alipayIsSet=$("#alipayIsSet").val();
+        jQuery.ajax({
+            url: 'findChildHistoryInfoByChildId',
+            data: 'childId=' + childId,
+            method: 'post',
+            dataType: 'json',
+            success: function (data) {
+                $("#table-charge-history tr:not(.table-head)").remove();
+                for (var i in  data) {
+                    var tr = $('<tr></tr>');
+                    var flowCode = $('<td width="20%">' + data[i].flowCode + '</td>');
+                    var amount = $('<td  width="20%">' + data[i].payed + '</td>');
+                    var payDate = $('<td  width="20%">' + new Date(data[i].payDate).format("yyyy-MM-dd") + '</td>');
+                    var payType = '';
+                    var col = $('<td  width="20%"><a cid="' + data[i].cid + '" name="' + data[i].flowCode + '" class="printbill" href="javascript:void(0);">补打小票</a>' +
+                        ' &nbsp;&nbsp;&nbsp;<a name="' + data[i].cid + '" class="delhistory" href="#">删除</a></td>');
+                    var col2=$('<td  width="20%"><a cid="' + data[i].cid + '" name="' + data[i].flowCode + '" class="printbill" href="javascript:void(0);">补打小票</a></td>');
+                    if (data[i].payType == '1') {
+                        payType = $('<td  width="20%">现金</td>');
+                        tr.append(flowCode, amount, payDate, payType, col);
+                    }
+                    if (data[i].payType == '2') {
+                        payType = $('<td  width="20%">刷卡</td>');
+                        tr.append(flowCode, amount, payDate, payType, col);
+                    }
+                    if (data[i].payType == '3'&&weChatIsSet!=0){
+                        payType = $('<td  width="20%">微信</td>');
+                        tr.append(flowCode, amount, payDate, payType, col2);
+                        // tr.append(flowCode, amount, payDate, payType, col);
+                    }
+                    if (data[i].payType == '3'&&weChatIsSet==0){
+                        payType = $('<td  width="20%">微信</td>');
+                        tr.append(flowCode, amount, payDate, payType, col);
+                    }
+                    if (data[i].payType == '4'&&alipayIsSet==0) {
+                        payType = $('<td  width="20%">支付宝</td>');
+                        tr.append(flowCode, amount, payDate, payType, col);
+                    }
+                    if (data[i].payType == '4'&&alipayIsSet!=0) {
+                        payType = $('<td  width="20%">支付宝</td>');
+                        tr.append(flowCode, amount, payDate, payType, col2);
+                    }
+                    $("#table-charge-history").append(tr);
+                }
+            }
+        });
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 });
+
+
+
+ //删除历史缴费
+    $(document).on('click', '.delhistory', function (e) {
+        e.preventDefault();
+        var cid = $(this).attr("name");
+        var initChildId = $("#initChildId").val();
+        bootbox.confirm("是否确定删除？", function (result) {
+            if (result) {
+                jQuery.ajax({
+                    url: $("#path").val() + '/charge/delChargingInfoHistory.do',
+                    data: 'cid=' + cid,
+                    method: 'post',
+                    success: function (data) {
+                        if ('norlue' == data) {
+                            bootbox.alert("无权限！");
+                        }
+                        if ('success' == data) {
+                            bootbox.alert("删除成功！");
+                            $("#initChildId").val(initChildId);
+                            setTimeout(function () {
+                                location.reload();
+                            }, 1500)
+                        }
+                        if ('false' == data) {
+                            bootbox.alert("历史月份费用已结算，无法删除！");
+                        }
+                    }
+                });
+            }
+        })
+
+
+    });
+
+
 
 
 //修改收费合计
@@ -242,6 +349,10 @@ function connected(id){
 	});
 	
 }
+
+
+
+
 
 
 $(document).on('click', "#display-all-items", function () {

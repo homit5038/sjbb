@@ -135,7 +135,6 @@ function printTicket(printer, container, width) {
         posY = "22mm";
     }
     var style = '<link rel="stylesheet" type="text/css" href="' + css + '">';
-
     LODOP.SET_PRINT_PAGESIZE(0, contentWidth, height, "bill");
     LODOP.ADD_PRINT_HTM(posX, posY, contentWidth, height, "<!doctype html>" + style + $(container).html());
     //LODOP.PREVIEW();
