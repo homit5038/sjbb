@@ -11,6 +11,9 @@ import com.xqx.frame.model.TPayedInfo;
 public class TPayedInfoServiceImpl implements TPayedInfoService {
 	@Autowired
 	TPayedInfoDao payedinfoDao;
+	
+	
+	
 	@Override
 	public List<TPayedInfo> findTPayedInfoByid(Long childId) {
 	
