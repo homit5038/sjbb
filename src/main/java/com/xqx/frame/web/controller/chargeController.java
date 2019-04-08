@@ -95,13 +95,13 @@ public class chargeController {
 
 	@ResponseBody
 	@RequestMapping(value = "/findChildHistory", method = RequestMethod.GET)
-	public List<TPayedInfo> findChildHistory(HttpServletRequest request){
+	public List<String> findChildHistory(HttpServletRequest request){
 		Long childId = Long.valueOf(request.getParameter("childId"));
 		
 		System.out.print("==========================");
 		
 		
-		List<TPayedInfo> infolist = payedinfoservice.findTPayedInfoByupdateUserID(childId);
+		List<String> infolist = payedinfoservice.findTPayedInfoByupdateUserID(childId);
 		return infolist;
 
 	}

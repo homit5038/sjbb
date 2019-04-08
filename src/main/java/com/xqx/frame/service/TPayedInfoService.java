@@ -6,5 +6,5 @@ import com.xqx.frame.model.TPayedInfo;
 
 public interface TPayedInfoService {
 	public List<TPayedInfo> findTPayedInfoByid(Long id);
-	public List<TPayedInfo> findTPayedInfoByupdateUserID(Long id);
+	public List<String> findTPayedInfoByupdateUserID(Long id);
 }

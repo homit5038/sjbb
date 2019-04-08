@@ -20,7 +20,7 @@ public interface TPayedInfoDao extends JpaRepository<TPayedInfo, Long>  {
 	List<TPayedInfo> findPayedInfoBychildId(Long childId);
 	
 	
-	@Query("from TPayedInfo where updateUserID = ?1")
-	List<TPayedInfo> findPayedInfoByUserID(@Param("updateUserID") Long UserID);
+	@Query("select * from TPayedInfo where childId = ?1")
+	List<String> findPayedInfoByUserID(@Param("childId") Long childId);
 	
 }

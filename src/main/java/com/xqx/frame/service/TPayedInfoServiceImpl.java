@@ -16,7 +16,7 @@ public class TPayedInfoServiceImpl implements TPayedInfoService {
 		return  payedinfoDao.findPayedInfoBychildId(childId);
 	}
 
-	public List<TPayedInfo> findTPayedInfoByupdateUserID(Long UserID) {
+	public List<String> findTPayedInfoByupdateUserID(Long UserID) {
 		
 		return  payedinfoDao.findPayedInfoByUserID(UserID);
 	}
