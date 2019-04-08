@@ -85,8 +85,7 @@ public class chargeController {
 		List<TClasses> classe=classesService.findAll();
 		List<TGrade> grade=gradeService.findAll();
 		List<TChargeItem> Itemlist=chargeItemDao.findAll();
-		
-		 List<TChildren> lists = childrenService.findChildrenByName(name);
+		List<TChildren> lists = childrenService.findChildrenByName(name);
 		m.addAttribute("classe", classe);
 		m.addAttribute("grade", grade);
 		m.addAttribute("lists", lists);
