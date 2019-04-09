@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.xqx.frame.form.PlayQueryVO;
-import com.xqx.frame.model.TPayedInfo;
 
+import com.xqx.frame.model.TPayedInfo;
 @Repository
 public interface TPayedInfoDao extends JpaRepository<TPayedInfo, Long>  {
 
@@ -18,6 +18,7 @@ public interface TPayedInfoDao extends JpaRepository<TPayedInfo, Long>  {
 	 * @param name
 	 * @return
 	 */
+
 
 	/*@Query(value="select top 10 from TPayedInfo ci where ci.updateUserID :childId")
 	List<TPayedInfo> findPayedInfoBychildId(@Param("childId")Long childId);
@@ -34,5 +35,5 @@ public interface TPayedInfoDao extends JpaRepository<TPayedInfo, Long>  {
 	
 	@Query("from TPayedInfo ci where ci.updateUserID = ?1 ")
 	TPayedInfo findPayedInfoByUserID(@Param("updateUserID") Long UserID);
-	
+
 }

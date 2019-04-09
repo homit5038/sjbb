@@ -247,8 +247,6 @@ public class TChildren extends BaseAuditEntity {
 	}
 
 
-
-
 	public TClasses getClasse() {
 		return classe;
 	}

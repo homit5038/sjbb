@@ -4,7 +4,6 @@ package com.xqx.frame.web.controller;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -39,7 +38,6 @@ import com.xqx.frame.dao.TPayedInfoDao;
 import com.xqx.frame.dao.TchargeItemDao;
 import com.xqx.frame.exception.ParameterCheckException;
 import com.xqx.frame.form.PageQueryResult;
-import com.xqx.frame.form.PlayQueryVO;
 import com.xqx.frame.form.QueryResult;
 import com.xqx.frame.model.SexType;
 import com.xqx.frame.model.TChargeItem;
@@ -87,8 +85,7 @@ public class chargeController {
 		List<TClasses> classe=classesService.findAll();
 		List<TGrade> grade=gradeService.findAll();
 		List<TChargeItem> Itemlist=chargeItemDao.findAll();
-		
-		 List<TChildren> lists = childrenService.findChildrenByName(name);
+		List<TChildren> lists = childrenService.findChildrenByName(name);
 		m.addAttribute("classe", classe);
 		m.addAttribute("grade", grade);
 		m.addAttribute("lists", lists);
@@ -102,12 +99,7 @@ public class chargeController {
 		Long childId = Long.valueOf(request.getParameter("childId"));
 		
 		System.out.print("==========================");
-		
-		
 		List<String> infolist = payedinfoservice.findTPayedInfoByid(childId);
-		
-	
-		
 		
 		return  infolist;
 

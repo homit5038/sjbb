@@ -1,7 +1,6 @@
 package com.xqx.frame.service;
 
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -70,6 +69,5 @@ public class TPayedInfoServiceImpl implements TPayedInfoService {
 		return payed;
 	}
 	
-
 
 }

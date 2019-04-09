@@ -48,7 +48,7 @@ document.loading.percent.value=bar+"%"
 if (bar<99)
 {setTimeout("count()",100);}//这里修改载入时间
 else
-{window.location = "http://www.kmhouse.org/";}//这里改成你的网站地址
+{window.location = "http://localhost:8084/zjk/";}//这里改成你的网站地址
 }
 </script>
 </p>
