@@ -12,13 +12,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 import com.xqx.frame.security.SecurityUtil;
 
 @Entity
 public class TPayedInfo extends BaseAuditEntity {
-	
+
 	private static final long serialVersionUID = -7477170402920751916L;
 
 	/*
