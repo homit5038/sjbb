@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
@@ -38,6 +39,7 @@ import com.xqx.frame.dao.TPayedInfoDao;
 import com.xqx.frame.dao.TchargeItemDao;
 import com.xqx.frame.exception.ParameterCheckException;
 import com.xqx.frame.form.PageQueryResult;
+import com.xqx.frame.form.PlayQueryVO;
 import com.xqx.frame.form.QueryResult;
 import com.xqx.frame.model.SexType;
 import com.xqx.frame.model.TChargeItem;
@@ -95,13 +97,15 @@ public class chargeController {
 
 	@ResponseBody
 	@RequestMapping(value = "/findChildHistory", method = RequestMethod.GET)
-	public List<String> findChildHistory(HttpServletRequest request){
+	public Object findChildHistory(HttpServletRequest request){
 		Long childId = Long.valueOf(request.getParameter("childId"));
 		
 		System.out.print("==========================");
-		List<String> infolist = payedinfoservice.findTPayedInfoByid(childId);
+		List<PlayQueryVO> infolist = payedinfoservice.getTPayedInfo(10, childId);
+
 		
-		return  infolist;
+		return new PageQueryResult<>(infolist);
+		
 
 	}
 

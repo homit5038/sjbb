@@ -26,11 +26,7 @@ public interface TPayedInfoDao extends JpaRepository<TPayedInfo, Long>  {
 	
 
 	@Query(value="select a.* from TPayedInfo a where  a.childId = ?1",nativeQuery=true)
-	List<String> listFCompanyNameByFOriginalCompanyID(@Param("childId")Long childId);
-
-
-	@Query(value="select childId from TPayedInfo a where  a.childId = ?1",nativeQuery=true)
-	 List<TPayedInfo> findPayedInfoBychildId(@Param("childId") Long childId);
+	List<PlayQueryVO> findPayedInfoBychildId(@Param("childId")Long childId);
 
 	
 	@Query("from TPayedInfo ci where ci.updateUserID = ?1 ")

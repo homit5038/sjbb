@@ -1,7 +1,7 @@
 package com.xqx.frame.form;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
+
 import java.util.Date;
 
 import javax.persistence.Temporal;
@@ -30,15 +30,15 @@ public class PlayQueryVO implements Serializable {
 	/*
 	 * 找零
 	 */
-    private BigDecimal chargereturn;		
+    private String chargereturn;		
 	/*
 	 * 实付金额
 	 */
-	private BigDecimal chargerealpay;
+	private String chargerealpay;
 	/*
 	 * 应付金额
 	 */
-	private BigDecimal chargeshouldpay;
+	private String chargeshouldpay;
 	public String getPaytype() {
 		return paytype;
 	}
@@ -51,22 +51,22 @@ public class PlayQueryVO implements Serializable {
 	public void setFlowCode(String flowCode) {
 		this.flowCode = flowCode;
 	}
-	public BigDecimal getChargereturn() {
+	public String getChargereturn() {
 		return chargereturn;
 	}
-	public void setChargereturn(BigDecimal chargereturn) {
+	public void setChargereturn(String chargereturn) {
 		this.chargereturn = chargereturn;
 	}
-	public BigDecimal getChargerealpay() {
+	public String getChargerealpay() {
 		return chargerealpay;
 	}
-	public void setChargerealpay(BigDecimal chargerealpay) {
+	public void setChargerealpay(String chargerealpay) {
 		this.chargerealpay = chargerealpay;
 	}
-	public BigDecimal getChargeshouldpay() {
+	public String getChargeshouldpay() {
 		return chargeshouldpay;
 	}
-	public void setChargeshouldpay(BigDecimal chargeshouldpay) {
+	public void setChargeshouldpay(String chargeshouldpay) {
 		this.chargeshouldpay = chargeshouldpay;
 	}
 	

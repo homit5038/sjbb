@@ -1,11 +1,17 @@
 package com.xqx.frame.service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +19,7 @@ import com.xqx.frame.dao.TChildrenDao;
 import com.xqx.frame.dao.TPayedInfoDao;
 import com.xqx.frame.form.PlayQueryVO;
 import com.xqx.frame.model.TChildren;
-import com.xqx.frame.model.TExpert;
-import com.xqx.frame.model.TExpertBatch;
+
 import com.xqx.frame.model.TPayedInfo;
 @Service
 public class TPayedInfoServiceImpl implements TPayedInfoService {
@@ -22,13 +27,16 @@ public class TPayedInfoServiceImpl implements TPayedInfoService {
 	TPayedInfoDao payedinfoDao;
 	@Autowired
 	TChildrenDao childrenDao;
+	@Autowired 
+	EntityManagerFactory entityManagerFactory;
 	@PersistenceContext
 	private EntityManager entityManager;
+	private Object BigDecimal;
 
 	@Override
-	public List<String> findTPayedInfoByid(Long childId) {
+	public List<PlayQueryVO> findTPayedInfoByid(Long childId) {
 	
-		return  payedinfoDao.listFCompanyNameByFOriginalCompanyID(childId);
+		return  payedinfoDao.findPayedInfoBychildId(childId);
 	}
 	
 	// 获取session
@@ -45,12 +53,43 @@ public class TPayedInfoServiceImpl implements TPayedInfoService {
 	
 	// 通过传入sql获取专家
 	@SuppressWarnings("unchecked")
-	public List<TPayedInfo> findTExpert(String sql) {
+	public List<PlayQueryVO> findTExpert(String sql) {
 		Session session = this.getSession();
 		SQLQuery query = session.createSQLQuery(sql);
 		query.addEntity(TPayedInfo.class);
+	
 		return query.list();
 	}
+	
+	
+	@Override
+	public List<PlayQueryVO> getTPayedInfo(int extractPepleNum, Long childId) {
+		
+		String sql = "select TOP "+extractPepleNum+" t.* from TPayedInfo t where t.childId = " + childId;
+		sql += " order by NEWID() ";
+		javax.persistence.Query query = entityManagerFactory.createEntityManager().createNativeQuery(sql);
+		query.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+		List<?> result = query.getResultList();
+	
+		List<Map<String, Object>> rows = (List<Map<String, Object>>) result;
+		
+		List<PlayQueryVO>  ciVo = new ArrayList<PlayQueryVO>();
+		if (rows != null && rows.size() > 0) {
+			for (int i = 0; i < rows.size(); i++) {
+				PlayQueryVO ci = new PlayQueryVO();
+				ci.setChargerealpay(rows.get(i).get("chargerealpay") == null ? null : rows.get(i).get("chargerealpay").toString());
+				ci.setChargereturn(rows.get(i).get("chargereturn") == null ? null : rows.get(i).get("chargereturn").toString());
+			    ci.setFlowCode(rows.get(i).get("flowCod") == null ? null : rows.get(i).get("flowCod").toString());
+				ci.setChargeshouldpay(rows.get(i).get("chargeshouldpay") == null ? null : rows.get(i).get("chargeshouldpay").toString());
+				
+				ciVo.add(ci);
+			}
+		}
+		
+		
+		return ciVo;
+	}
+	
 	
 	
 	@Override
@@ -62,11 +101,17 @@ public class TPayedInfoServiceImpl implements TPayedInfoService {
 				+ " from TPayedInfo e join TChildren eb on eb.id = e.childId where  "
 				+ " and eb.batchId = "+ childId
 				+ " order by flag desc ";
-		List<TPayedInfo> payedinfo = findTExpert(sql);
-		if(payedinfo != null && payedinfo.size() > 0){
+		List<PlayQueryVO> payedinfo = findTExpert(sql);
+/*		if(payedinfo != null && payedinfo.size() > 0){
 			payed.setPayinfo(payedinfo);
-		}
+		}*/
 		return payed;
+	}
+
+	@Override
+	public List<TPayedInfo> getTPayedInfo(Long extractPepleNum, Long childId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

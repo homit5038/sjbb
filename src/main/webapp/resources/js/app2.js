@@ -112,21 +112,42 @@ $(document).on('click', '#charge-item-table tr:not(:first)', function () {
         
         jQuery.ajax({
             url: 'findChildHistory',
-           // data: 'childId=1' + $("#childId").val(),
-            data: 'childId=1',
+            data: 'childId=' + $("#childId").val(),
+           // data: 'childId=1',
             method: 'get',
             dataType: 'json',
             success: function (data) {
                 $("#table-charge-history tr:not(.table-head)").remove();
+               // alert(data)
+                
+                
+ /*             var json = eval(data.data); //数组       
+             $.each(json, function (index, item) {
+                 //循环获取数据  
+                 var name = json[index].chargerealpay;
+                 var idnumber = json[index].chargeshouldpay;
+                 var sex = json[index].Sex;
+                 console.log(name+idnumber)
+                // $("#list").html($("#list").html() + "<br>" + name + " - " + idnumber + " - " + sex + "<br/>");
+             });
+                */
+                  var data = eval(data.data); //数组       
+               
                 for (var i in  data) {
+                	
+                	console.log(data[i].chargereturn)
+                	
+         
+                	
+                	
                     var tr = $('<tr></tr>');
-                    var flowCode = $('<td width="20%">' + data[i].flowCode + '</td>');
-                    var amount = $('<td  width="20%">' + data[i].payed + '</td>');
+                    var flowCode = $('<td width="20%">' + data[i].chargereturn + '</td>');
+                    var amount = $('<td  width="20%">' + data[i].chargerealpay + '</td>');
                     var payDate = $('<td  width="20%">' + new Date(data[i].payDate).format("yyyy-MM-dd") + '</td>');
                     var payType = '';
-                    var col = $('<td  width="20%"><a cid="' + data[i].cid + '" name="' + data[i].flowCode + '" class="printbill" href="javascript:void(0);">补打小票</a>' +
+                    var col = $('<td  width="20%"><a cid="' + data[i].cid + '" name="' + data[i].chargeshouldpay + '" class="printbill" href="javascript:void(0);">补打小票</a>' +
                         ' &nbsp;&nbsp;&nbsp;<a name="' + data[i].cid + '" class="delhistory" href="#">删除</a></td>');
-                    var col2=$('<td  width="20%"><a cid="' + data[i].cid + '" name="' + data[i].flowCode + '" class="printbill" href="javascript:void(0);">补打小票</a></td>');
+                    var col2=$('<td  width="20%"><a cid="' + data[i].cid + '" name="' + data[i].chargeshouldpay + '" class="printbill" href="javascript:void(0);">补打小票</a></td>');
                     if (data[i].payType == '1') {
                         payType = $('<td  width="20%">现金</td>');
                         tr.append(flowCode, amount, payDate, payType, col);
