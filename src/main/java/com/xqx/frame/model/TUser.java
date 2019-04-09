@@ -93,7 +93,14 @@ public class TUser extends BaseAuditEntity implements UserDetails {
 	@NotFound(action = NotFoundAction.IGNORE)
 	private List<TUserRole> roles;
 
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+	private List<TPayedInfo> payinfo;
+	
+	
+	
 	/**
+	 * 
 	 * 用于记录用户登录系统时的ip， 不保存到用户表中
 	 */
 	@Transient
@@ -109,6 +116,17 @@ public class TUser extends BaseAuditEntity implements UserDetails {
 
 	public String getDeptName() {
 		return deptName;
+	}
+
+	
+	
+	
+	public List<TPayedInfo> getPayinfo() {
+		return payinfo;
+	}
+
+	public void setPayinfo(List<TPayedInfo> payinfo) {
+		this.payinfo = payinfo;
 	}
 
 	public void setDeptName(String deptName) {
