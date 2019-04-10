@@ -178,19 +178,6 @@ $(document).on('click', '#charge-item-table tr:not(:first)', function () {
             }
         });
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 });
 
 
