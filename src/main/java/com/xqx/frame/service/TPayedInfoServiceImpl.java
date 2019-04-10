@@ -77,9 +77,17 @@ public class TPayedInfoServiceImpl implements TPayedInfoService {
 		if (rows != null && rows.size() > 0) {
 			for (int i = 0; i < rows.size(); i++) {
 				PlayQueryVO ci = new PlayQueryVO();
+				
+				ci.setPaytype(rows.get(i).get("Paytype") == null ? null : rows.get(i).get("Paytype").toString());
 				ci.setChargerealpay(rows.get(i).get("chargerealpay") == null ? null : rows.get(i).get("chargerealpay").toString());
+				ci.setPaytype(rows.get(i).get("paytype") == null ? null : rows.get(i).get("paytype").toString());
+				ci.setFlowCode(rows.get(i).get("flowCode") == null ? null : rows.get(i).get("flowCode").toString());
+				
+				ci.setChargConnection(rows.get(i).get("chargConnection") == null ? null : rows.get(i).get("chargConnection").toString());
 				ci.setChargereturn(rows.get(i).get("chargereturn") == null ? null : rows.get(i).get("chargereturn").toString());
-			    ci.setFlowCode(rows.get(i).get("flowCod") == null ? null : rows.get(i).get("flowCod").toString());
+				ci.setPayableDsate(rows.get(i).get("payableDsate") == null ? null : rows.get(i).get("payableDsate").toString());
+				ci.setTimeb(rows.get(i).get("timeb") == null ? null : rows.get(i).get("timeb").toString());
+			   
 				ci.setChargeshouldpay(rows.get(i).get("chargeshouldpay") == null ? null : rows.get(i).get("chargeshouldpay").toString());
 				
 				ciVo.add(ci);

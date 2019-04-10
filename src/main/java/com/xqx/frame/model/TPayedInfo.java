@@ -84,7 +84,11 @@ public class TPayedInfo extends BaseAuditEntity {
 	@Size(max = 500)
 	private String chargConnection;
 
-
+	/*
+	 * 关联收费项详情
+	 */
+	@Size(max = 2500)
+	private String chargConnectiontext;
 
 
 	public String getPaytype() {
@@ -202,6 +206,20 @@ public class TPayedInfo extends BaseAuditEntity {
 		this.chargConnection = chargConnection;
 	}
 
+	
+	
+	
+	
+
+	public String getChargConnectiontext() {
+		return chargConnectiontext;
+	}
+
+
+	public void setChargConnectiontext(String chargConnectiontext) {
+		this.chargConnectiontext = chargConnectiontext;
+	}
+
 
 	@PrePersist
 	public void createAuditInfo() {
@@ -226,5 +244,5 @@ public class TPayedInfo extends BaseAuditEntity {
 		setUpdateUserID(u.getId());
 		setLastUpdaterIp(u.getLoginIpAddress());
 	}
-	
+
 }

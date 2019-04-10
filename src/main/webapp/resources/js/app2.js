@@ -143,33 +143,33 @@ $(document).on('click', '#charge-item-table tr:not(:first)', function () {
                     var tr = $('<tr></tr>');
                     var flowCode = $('<td width="20%">' + data[i].chargereturn + '</td>');
                     var amount = $('<td  width="20%">' + data[i].chargerealpay + '</td>');
-                    var payDate = $('<td  width="20%">' + new Date(data[i].payDate).format("yyyy-MM-dd") + '</td>');
-                    var payType = '';
-                    var col = $('<td  width="20%"><a cid="' + data[i].cid + '" name="' + data[i].chargeshouldpay + '" class="printbill" href="javascript:void(0);">补打小票</a>' +
-                        ' &nbsp;&nbsp;&nbsp;<a name="' + data[i].cid + '" class="delhistory" href="#">删除</a></td>');
-                    var col2=$('<td  width="20%"><a cid="' + data[i].cid + '" name="' + data[i].chargeshouldpay + '" class="printbill" href="javascript:void(0);">补打小票</a></td>');
-                    if (data[i].payType == '1') {
+                    var payDate = $('<td  width="20%">' + new Date(data[i].payableDsate).format("yyyy-MM-dd") + '</td>');
+                    var paytype = '';
+                    var col = $('<td  width="20%"><a cid="' + data[i].id + '" name="' + data[i].chargeshouldpay + '" class="printbill" href="javascript:void(0);">补打小票</a>' +
+                        ' &nbsp;&nbsp;&nbsp;<a name="' + data[i].id + '" class="delhistory" href="#">删除</a></td>');
+                    var col2=$('<td  width="20%"><a cid="' + data[i].id + '" name="' + data[i].chargeshouldpay + '" class="printbill" href="javascript:void(0);">补打小票</a></td>');
+                    if (data[i].paytype == '1') {
                         payType = $('<td  width="20%">现金</td>');
                         tr.append(flowCode, amount, payDate, payType, col);
                     }
-                    if (data[i].payType == '2') {
+                    if (data[i].paytype == '2') {
                         payType = $('<td  width="20%">刷卡</td>');
                         tr.append(flowCode, amount, payDate, payType, col);
                     }
-                    if (data[i].payType == '3'&&weChatIsSet!=0){
+                    if (data[i].paytype == '3'&&weChatIsSet!=0){
                         payType = $('<td  width="20%">微信</td>');
                         tr.append(flowCode, amount, payDate, payType, col2);
                         // tr.append(flowCode, amount, payDate, payType, col);
                     }
-                    if (data[i].payType == '3'&&weChatIsSet==0){
+                    if (data[i].paytype == '3'&&weChatIsSet==0){
                         payType = $('<td  width="20%">微信</td>');
                         tr.append(flowCode, amount, payDate, payType, col);
                     }
-                    if (data[i].payType == '4'&&alipayIsSet==0) {
+                    if (data[i].paytype == '4'&&alipayIsSet==0) {
                         payType = $('<td  width="20%">支付宝</td>');
                         tr.append(flowCode, amount, payDate, payType, col);
                     }
-                    if (data[i].payType == '4'&&alipayIsSet!=0) {
+                    if (data[i].paytype == '4'&&alipayIsSet!=0) {
                         payType = $('<td  width="20%">支付宝</td>');
                         tr.append(flowCode, amount, payDate, payType, col2);
                     }

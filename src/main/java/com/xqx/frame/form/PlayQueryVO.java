@@ -16,6 +16,11 @@ import javax.validation.constraints.Size;
  */
 public class PlayQueryVO implements Serializable {
 
+	private int id;
+	private String timeb;
+	private String payableDsate;
+	@Size(max = 500)
+	private String chargConnection;
 	/*
 	 * 付款方式
 	 */
@@ -38,7 +43,34 @@ public class PlayQueryVO implements Serializable {
 	/*
 	 * 应付金额
 	 */
+	
 	private String chargeshouldpay;
+	
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getTimeb() {
+		return timeb;
+	}
+	public void setTimeb(String timeb) {
+		this.timeb = timeb;
+	}
+	public String getPayableDsate() {
+		return payableDsate;
+	}
+	public void setPayableDsate(String payableDsate) {
+		this.payableDsate = payableDsate;
+	}
+	public String getChargConnection() {
+		return chargConnection;
+	}
+	public void setChargConnection(String chargConnection) {
+		this.chargConnection = chargConnection;
+	}
 	public String getPaytype() {
 		return paytype;
 	}

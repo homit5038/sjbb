@@ -301,6 +301,8 @@
 <!-- 		<input type="text" id="childIdList">
 		<input type="text" id="chargeIdList"> -->
 		
+		
+			<div class="row" style="min-height:200px;height:200px; overflow: auto; width: 100%">
 			<table class="table table-bordered table-condensed" id="charge-item-table">
 				<c:choose>
 					<c:when test="${num==0}">
@@ -330,7 +332,7 @@
 					</c:otherwise>
 				</c:choose>
 			</table>
-			
+			</div>
 	
 <div class="col-md-12 charge-detail"></div>	
 <form id="myform" class="form-inline">
@@ -412,7 +414,7 @@
 			</table>	
 			
 			<div class="row" style="min-height:107px;height: 107px; overflow: auto; width: 100%">
-            <table id="table-charge-history" class="table table-bordered table-condensed-mine text-center">
+            <table id="table-charge-history" class="table table-bordered table-condensed-mine">
                 <thead>
                 <tr class="table-head">
                     <th width="20%">小票号</th>

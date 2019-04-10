@@ -51,6 +51,7 @@ import com.xqx.frame.model.TPayedInfo;
 import com.xqx.frame.model.TUser;
 import com.xqx.frame.model.query.employeQuery;
 import com.xqx.frame.security.SecurityUtil;
+import com.xqx.frame.service.ChargeItemService;
 import com.xqx.frame.service.ChildrenService;
 import com.xqx.frame.service.FileService;
 import com.xqx.frame.service.GradeService;
@@ -75,6 +76,11 @@ public class chargeController {
 	FileService fileservice;
 	@Autowired
     GradeService gradeService;
+	@Autowired
+	ChargeItemService chargeItemService;
+	
+	
+	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(
@@ -135,7 +141,24 @@ public class chargeController {
 		Long childId = Long.valueOf(request.getParameter("childId"));
 		String paytype = request.getParameter("paytype");
 		String paystatus = request.getParameter("payStatus");
+
 		String chargConnection = request.getParameter("chargConnection");
+		
+		
+		List<TChargeItem> chargeitem = new ArrayList<TChargeItem>();
+		if(!"".equals(chargConnection)&&chargConnection!=null){
+			String[] ss = chargConnection.split(",");
+		//Set<TChargeItem> trade = new HashSet<TChargeItem>();
+	
+		for(int i=0;i<ss.length;i++){
+			
+			chargeitem.add(chargeItemService.findChargeitemById(Long.valueOf(ss[i])));
+			
+			
+		}
+		}
+		String chargConnectiontext=chargeitem.toString();
+		
 		String flowCode = request.getParameter("flowCode");
 		String remarks = request.getParameter("bz");
 		
@@ -146,12 +169,14 @@ public class chargeController {
 		PayedInfo.setUser(user);
 		PayedInfo.setPayableDsate(now);
 		PayedInfo.setTimeb(now);
+		PayedInfo.setFlowCode(flowCode);
 		PayedInfo.setChargConnection(chargConnection);
 		PayedInfo.setChargereturn(chargereturn);
 		PayedInfo.setChildren(children);
 		PayedInfo.setPaytype(paytype);
 		PayedInfo.setFlowCode(paystatus+"");
 		PayedInfo.setRemarks(remarks);
+		PayedInfo.setChargConnectiontext(chargConnectiontext);
 		payedinfoDao.save(PayedInfo);
 		//System.out.print("============================================["+shouldpay);
 		return "ok";
