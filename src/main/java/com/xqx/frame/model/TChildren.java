@@ -1,16 +1,22 @@
 package com.xqx.frame.model;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.xqx.frame.security.SecurityUtil;
@@ -49,7 +55,9 @@ public class TChildren extends BaseAuditEntity {
 	@JoinColumn(name = "childGradeId",referencedColumnName="id")
 	private TGrade grade;
 	
-
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "children", cascade = CascadeType.ALL)
+	private List<TPayedInfo> payinfo;
 	
 	
 	/**
@@ -217,6 +225,16 @@ public class TChildren extends BaseAuditEntity {
 	}
 
 
+
+
+	public List<TPayedInfo> getPayinfo() {
+		return payinfo;
+	}
+
+
+	public void setPayinfo(List<TPayedInfo> payinfo) {
+		this.payinfo = payinfo;
+	}
 
 
 	public TGrade getGrade() {

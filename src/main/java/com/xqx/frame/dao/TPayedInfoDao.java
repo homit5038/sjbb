@@ -6,8 +6,10 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import com.xqx.frame.model.TPayedInfo;
 
+import com.xqx.frame.form.PlayQueryVO;
+
+import com.xqx.frame.model.TPayedInfo;
 @Repository
 public interface TPayedInfoDao extends JpaRepository<TPayedInfo, Long>  {
 
@@ -16,11 +18,18 @@ public interface TPayedInfoDao extends JpaRepository<TPayedInfo, Long>  {
 	 * @param name
 	 * @return
 	 */
-	@Query("from TPayedInfo where childId = ?1")
-	List<TPayedInfo> findPayedInfoBychildId(Long childId);
+
+
+	/*@Query(value="select top 10 from TPayedInfo ci where ci.updateUserID :childId")
+	List<TPayedInfo> findPayedInfoBychildId(@Param("childId")Long childId);
+	*/
 	
+
+	@Query(value="select a.* from TPayedInfo a where  a.childId = ?1",nativeQuery=true)
+	List<PlayQueryVO> findPayedInfoBychildId(@Param("childId")Long childId);
+
 	
-	@Query("select * from TPayedInfo where childId = ?1")
-	List<String> findPayedInfoByUserID(@Param("childId") Long childId);
-	
+	@Query("from TPayedInfo ci where ci.updateUserID = ?1 ")
+	TPayedInfo findPayedInfoByUserID(@Param("updateUserID") Long UserID);
+
 }

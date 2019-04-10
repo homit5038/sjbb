@@ -125,6 +125,7 @@ function editPwd() {
 								<li><a href="${ctx }/chargeitem/new" target="menuFrame">新增班级</a></li>
 								<li class="divider"></li>
 								<li><a href="${ctx }/chargeitem/list" target="menuFrame">收费项列表</a></li>
+								<li><a href="${ctx }/charge/chargemain" target="menuFrame">学生收费</a></li>
 							</ul></li>
 	       
 						<li class="dropdown"><a href="#" class="dropdown-toggle"
