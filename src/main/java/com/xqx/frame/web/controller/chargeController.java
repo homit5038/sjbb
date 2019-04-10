@@ -144,7 +144,6 @@ public class chargeController {
 
 		String chargConnection = request.getParameter("chargConnection");
 		//凌晨修改的代码
-		
 		List<TChargeItem> chargeitem = new ArrayList<TChargeItem>();
 		if(!"".equals(chargConnection)&&chargConnection!=null){
 			String[] ss = chargConnection.split(",");
