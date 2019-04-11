@@ -8,16 +8,25 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.xqx.frame.dao.TChildrenDao;
 import com.xqx.frame.dao.TPayedInfoDao;
 import com.xqx.frame.form.PlayQueryVO;
+import com.xqx.frame.model.TChargeItem;
 import com.xqx.frame.model.TChildren;
 
 import com.xqx.frame.model.TPayedInfo;
@@ -59,6 +68,27 @@ public class TPayedInfoServiceImpl implements TPayedInfoService {
 		query.addEntity(TPayedInfo.class);
 	
 		return query.list();
+	}
+
+	@Override
+	public Page<TPayedInfo> findAll(final String name,Pageable pageable) {
+		
+		return payedinfoDao.findAll(new Specification<TPayedInfo>() {
+			
+			@Override
+			public Predicate toPredicate(Root<TPayedInfo> root, CriteriaQuery<?> query,
+					CriteriaBuilder cb) {
+				
+                List<Predicate> predicates = new ArrayList<Predicate>();
+                
+                if(!StringUtils.isEmpty(name)){  
+                    predicates.add(cb.equal(root.get("ItemName"), name));  
+                }  
+                
+                query.where(predicates.toArray(new Predicate[predicates.size()]));
+                return null;  
+            }
+		}, pageable);
 	}
 	
 	
@@ -122,5 +152,12 @@ public class TPayedInfoServiceImpl implements TPayedInfoService {
 		return null;
 	}
 	
+	
+	@Override
+	public void deleteTPayedInfo(long id) {
+		TPayedInfo payedInfo = payedinfoDao.findOne(id);
+		payedinfoDao.delete(payedInfo);
+
+	}
 
 }

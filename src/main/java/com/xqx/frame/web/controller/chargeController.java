@@ -87,6 +87,11 @@ public class chargeController {
 				new SimpleDateFormat("yyyy-MM-dd"), true));
 	}
 
+	
+	
+
+	
+	
 	@RequestMapping(value = "/chargemain")
 	public String chargeMain(Model m,HttpServletRequest request){
 		String name = request.getParameter("childName");
@@ -101,6 +106,32 @@ public class chargeController {
 		return "/charge/chargemain";
 	}
 
+
+	
+	@RequestMapping(value = "/chargelist")
+    public String chargelist(Model m,
+				//SessionStatus sessionStatus,
+				@PageableDefault(page = 0, size = 10,direction = Direction.DESC) Pageable p,HttpServletRequest request){
+	
+		
+		String name = request.getParameter("childName");
+		List<TClasses> classe=classesService.findAll();
+		List<TGrade> grade=gradeService.findAll();
+
+		
+		Page<TPayedInfo> list = payedinfoservice.findAll(name,p);
+		m.addAttribute("classe", classe);
+		m.addAttribute("grade", grade);
+		m.addAttribute("size", p.getPageSize());
+		m.addAttribute("page", p.getPageNumber());
+		m.addAttribute("num", list.getTotalElements());
+		m.addAttribute("data", list);
+		m.addAttribute("method", "get");
+
+		return "/charge/list";
+	}
+	
+	
 	@ResponseBody
 	@RequestMapping(value = "/findChildHistory", method = RequestMethod.GET)
 	public Object findChildHistory(HttpServletRequest request){
@@ -120,7 +151,19 @@ public class chargeController {
 	
 	
 	
-	
+	/**
+	 * 删除收费记录
+	 * @param id
+	 * @param m
+	 * @return
+	 * @throws ParameterCheckException 
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/{id}/del")
+	public String deletePayedinfo(@PathVariable Long id, Model m) throws ParameterCheckException {
+		payedinfoservice.deleteTPayedInfo(id);
+		return "ok";
+	}
 	
 	
 	
@@ -143,8 +186,7 @@ public class chargeController {
 		String paystatus = request.getParameter("payStatus");
 
 		String chargConnection = request.getParameter("chargConnection");
-		
-		
+		//凌晨修改的代码
 		List<TChargeItem> chargeitem = new ArrayList<TChargeItem>();
 		if(!"".equals(chargConnection)&&chargConnection!=null){
 			String[] ss = chargConnection.split(",");

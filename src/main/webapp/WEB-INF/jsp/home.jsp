@@ -152,6 +152,7 @@ function editPwd() {
 								<li class="divider"></li>
 								<li><a href="${ctx }/employe/list" target="menuFrame">职工列表</a></li>	
 								<li><a href="${ctx }/children/list" target="menuFrame">学生列表</a></li>
+								<li><a href="${ctx }/charge/chargelist" target="menuFrame">学生缴费列表</a></li>
 							</ul>
 							</li>
 					</ul>
