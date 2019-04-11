@@ -102,8 +102,6 @@ $(document).on('click', '#charge-item-table tr:not(:first)', function () {
 	chargeCount()
 	//connected($(this).attr("data-id"))
 	
-	
-	
 	  //查询缴费历史
         var weChatIsSet=$("#weChatIsSet").val();
         var alipayIsSet=$("#alipayIsSet").val();
@@ -177,19 +175,6 @@ $(document).on('click', '#charge-item-table tr:not(:first)', function () {
                 }
             }
         });
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 });
 
