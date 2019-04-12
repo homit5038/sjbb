@@ -7,7 +7,6 @@ public enum Payetyped {
 	WET("微信","3",""),
 	PAY("支付宝","4","");
 	
-	
 	private String name;
 	private String displayName;
 	private String describe;
