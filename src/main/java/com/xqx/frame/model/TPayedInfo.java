@@ -4,12 +4,15 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.xqx.frame.security.SecurityUtil;
@@ -22,8 +25,8 @@ public class TPayedInfo extends BaseAuditEntity {
 	/*
 	 * 付款方式
 	 */
-
-	private String paytype;
+	@Enumerated(EnumType.STRING)
+	private Payetyped paytype;
 	/*
 	 *  小票号
 	 */
@@ -91,12 +94,12 @@ public class TPayedInfo extends BaseAuditEntity {
 	private String chargConnectiontext;
 
 
-	public String getPaytype() {
+	public Payetyped getPaytype() {
 		return paytype;
 	}
 
 
-	public void setPaytype(String paytype) {
+	public void setPaytype(Payetyped paytype) {
 		this.paytype = paytype;
 	}
 

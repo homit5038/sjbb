@@ -41,7 +41,7 @@ $(function(){
 				jQuery('#main').hideLoading();
 				if (data) {
 					alert("删除成功");
-					window.location = ("${ctx}/charge/list");
+					window.location = ("${ctx}/charge/chargelist");
 				} else {
 					//
 				}
@@ -51,7 +51,7 @@ $(function(){
 
 	// 刷新页面
 	function refresh(){
-		window.location = ("${ctx}/employe/list");
+		window.location = ("${ctx}/charge/chargelist");
 	}
 	
 	
@@ -61,13 +61,13 @@ $(function(){
 	<pre>缴费记录>学生缴费列表</pre>
 	<div class="panel panel-info" style="width: 99%">
 		<div class="panel-heading">
-			<form id="expertForm" action="${ctx}/charge/chargelist" method="post">
+			<form id="expertForm" class="form-inline row"action="${ctx}/charge/chargelist" method="post">
 				<input type="hidden" id="size" name="size" value="${size}"> 
 			    <input type="hidden" id="page" name="page" value="${page}">
 				<table width="100%">
 					<tr height="40px">
 						<td align="right" width="100px">姓名：</td>
-						<td align="left">
+						<td align="left" width="100px" >
 						<input type="text" name="employeName" value="${name}"
 							style="width: 180px" class="form-control" placeholder="请输入专家姓名">
 							</td>
@@ -127,20 +127,24 @@ $(function(){
 						<c:forEach items="${data.content }" var="data">
 					 <tr>
 								<td> 
-								   <a class="btn btn-primary  btn-xs" href="#" onclick="edit('${data.id}')">修改 </a>
+								   
 								   <a class="btn btn-primary  btn-xs" href="javascript:void(0)" onclick="del('${data.id}')">删除 </a>
 								   <a class="btn btn-primary  btn-xs"  target="_blank" href="${data.id}/read">查看详细</a>
 								</td>
 								
 <td>${data.children.childName}</td>						
-<td>${data.paytype }</td>
+<td>${data.paytype.displayName }</td>
 <td>${data.chargereturn }</td>
 <td>${data.chargerealpay}</td>
 <td>${data.chargeshouldpay}</td>
 <td>${data.timeb}</td>
 <td>${data.payableDsate}</td>
 
-<td id="chargtext">${data.chargConnectiontext}</td>
+<td id="chargtext">${data.chargConnectiontext}
+
+
+
+</td>
 <td>${data.chargConnection}</td>				
 <td>${data.remarks}</td>			
 

@@ -85,7 +85,7 @@ public class TChargeItem extends BaseEntity implements Serializable {
 	
 	@Override
 	public String toString() {
-		return ItemName+"："+Amount+" ";
+		return "ItemName:"+Amount+" ";
 	}
 
 

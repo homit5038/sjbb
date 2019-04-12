@@ -154,10 +154,10 @@ public class TPayedInfoServiceImpl implements TPayedInfoService {
 	
 	
 	@Override
-	public void deleteTPayedInfo(long id) {
-		TPayedInfo payedInfo = payedinfoDao.findOne(id);
-		payedinfoDao.delete(payedInfo);
-
+	public  void deleteTPayedInfo(long id) {
+		//TPayedInfo payedInfo = payedinfoDao.findOne(id);
+		
+		 payedinfoDao.delete(id);
 	}
 
 }

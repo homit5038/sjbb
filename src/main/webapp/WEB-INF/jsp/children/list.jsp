@@ -74,7 +74,7 @@
 )
 
 </c:forEach>
-			<form id="expertForm" action="${ctx}/children/list" method="post">
+			<form id="expertForm" class="form-inline row" action="${ctx}/children/list" method="post">
 				<input type="hidden" id="size" name="size" value="${size}"> 
 			    <input type="hidden" id="page" name="page" value="${page}">
 				<table>

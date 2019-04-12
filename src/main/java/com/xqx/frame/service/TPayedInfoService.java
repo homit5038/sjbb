@@ -16,10 +16,6 @@ public interface TPayedInfoService {
 	public TChildren findPayedInfoBychildrenId(Long childId);
 	public Page<TPayedInfo> findAll(final String name,Pageable pageable);
 	public List<TPayedInfo> getTPayedInfo(Long extractPepleNum, Long childId) ;
-	/**
-	 * 删除专家
-	 * @param id
-	 */
 	public void deleteTPayedInfo(long id);
 	List<PlayQueryVO> getTPayedInfo(int extractPepleNum, Long childId);
 }
