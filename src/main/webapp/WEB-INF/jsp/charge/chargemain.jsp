@@ -341,10 +341,10 @@
 <span id="selected-kinder">张征睿</span><span id="datast"></span>月份 缴费详情 
                         <label class="radio-inline"> <input id="display-all-items" type="checkbox">显示全部收费项 </label>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <label class="radio-inline"> <input id="paytypeCash" class="paytype" value="1" type="radio" name="paytype" checked="checked">现金 </label>
-                        <label class="radio-inline"> <input id="paytypeCard" class="paytype" value="2" type="radio" name="paytype">刷卡 </label>
-                        <label class="radio-inline"> <input id="paytypeWet" class="paytype" value="3" type="radio" name="paytype">微信 </label>
-                        <label class="radio-inline"><input id="paytypePay" class="paytype" value="4" type="radio" name="paytype">支付宝 </label>
+                        <label class="radio-inline"> <input id="paytypeCash" class="paytype" value="CASH" type="radio" name="paytype" checked="checked">现金 </label>
+                        <label class="radio-inline"> <input id="paytypeCard" class="paytype" value="CARD" type="radio" name="paytype">刷卡 </label>
+                        <label class="radio-inline"> <input id="paytypeWet" class="paytype" value="WET" type="radio" name="paytype">微信 </label>
+                        <label class="radio-inline"><input id="paytypePay" class="paytype" value="PAY" type="radio" name="paytype">支付宝 </label>
                     </div> </div>
 
 <div class="row">
