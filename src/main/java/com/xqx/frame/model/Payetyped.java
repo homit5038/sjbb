@@ -2,10 +2,10 @@ package com.xqx.frame.model;
 
 public enum Payetyped {
 
-	CASH("现金","1",""),
-	CARD("刷卡","2",""),
-	WET("微信","3",""),
-	PAY("支付宝","4","");
+	CASH("CASH","1","现金"),
+	CARD("CARD","2","刷卡"),
+	WET("WET","3","微信"),
+	PAY("PAY","4","支付宝");
 	
 	private String name;
 	private String displayName;
@@ -23,7 +23,20 @@ public enum Payetyped {
 		this.describe = describe;
 	}
 	
-	
+	 public static Payetyped get(int v) {
+	        String str = String.valueOf(v);
+	        return get(str);
+	    }
+	 
+    public static Payetyped get(String str) {
+	        for (Payetyped e : values()) {
+	            if(e.toString().equals(str)) {
+	                return e;
+	            }
+	        }
+	        return null;
+	    }
+
 	public String getName() {
 		return name;
 	}

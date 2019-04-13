@@ -133,7 +133,7 @@ $(function(){
 								</td>
 								
 <td>${data.children.childName}</td>						
-<td>${data.paytype.displayName }</td>
+<td>${data.paytype.describe}</td>
 <td>${data.chargereturn }</td>
 <td>${data.chargerealpay}</td>
 <td>${data.chargeshouldpay}</td>

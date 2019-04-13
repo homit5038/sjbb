@@ -185,8 +185,8 @@ public class chargeController {
 		String paytype = request.getParameter("paytype");
 
 		Payetyped paytypa =Payetyped.valueOf(paytype);
+		String paytypas=paytypa.toString();
 		
-	
 		String paystatus = request.getParameter("payStatus");
 
 		String chargConnection = request.getParameter("chargConnection");
@@ -207,9 +207,9 @@ public class chargeController {
 		
 		String flowCode = request.getParameter("flowCode");
 		String remarks = request.getParameter("bz");
-		
+	
 		TChildren children=childrenDao.findOne(childId);
-		TPayedInfo PayedInfo=new  TPayedInfo();
+		TPayedInfo PayedInfo=new TPayedInfo(paytypas);
 		PayedInfo.setChargeshouldpay(shouldpay);
 		PayedInfo.setChargerealpay(chargerealpay);
 		PayedInfo.setUser(user);
@@ -220,7 +220,7 @@ public class chargeController {
 		PayedInfo.setChargereturn(chargereturn);
 		PayedInfo.setChildren(children);
 		//PayedInfo.setPaytype(paytypa.CARD);
-		PayedInfo.setPaytype(paytypa);
+		//PayedInfo.setPaytype(paytypas);
 		PayedInfo.setFlowCode(paystatus+"");
 		PayedInfo.setRemarks(remarks);
 		PayedInfo.setChargConnectiontext(chargConnectiontext);

@@ -63,7 +63,7 @@
 </script>
 </head>
 <body id="main">
-	<pre>班级>班级列表</pre>
+	<pre>学生>报名收费</pre>
 	
 	
 	<div id="wrap" style="display: none">
@@ -417,7 +417,7 @@
             <table id="table-charge-history" class="table table-bordered table-condensed-mine">
                 <thead>
                 <tr class="table-head">
-                    <th width="20%">小票号</th>
+                    <th width="20%">小票号损失</th>
                     <th width="20%">缴费金额（元）</th>
                     <th width="20%">缴费时间</th>
                     <th width="20%">缴费方式</th>

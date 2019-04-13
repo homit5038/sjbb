@@ -94,6 +94,13 @@ public class TPayedInfo extends BaseAuditEntity {
 	private String chargConnectiontext;
 
 
+
+	public 	TPayedInfo() {
+		
+	}
+	public 	TPayedInfo(String paytype) {
+		this.paytype=Payetyped.valueOf(paytype);
+	}
 	public Payetyped getPaytype() {
 		return paytype;
 	}
