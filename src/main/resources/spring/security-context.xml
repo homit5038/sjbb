@@ -1,46 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/security"
-	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	xmlns:beans="http://www.springframework.org/schema/beans"
+			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			 xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd
            http://www.springframework.org/schema/security
            http://www.springframework.org/schema/security/spring-security.xsd">
 
-	<http auto-config='true' authentication-manager-ref="authenticationManager">
-	    <intercept-url pattern="/home/**" access="ROLE_ADMIN,ROLE_EXPERT,ROLE_SALES" />
+	<http pattern="/auth/login" security="none"></http>
+	<!--<http pattern="/m/children/list" security="none"></http>-->
+
+	<http auto-config='true'  authentication-manager-ref="authenticationManager" >
+<!--		<intercept-url pattern="/auth/login" access="hasRole('ROLE_USER')" />-->
+		<!--<intercept-url pattern="/auth/login"  access="'IS_AUTHENTICATED_FULLY'" />-->
+		<!--<intercept-url pattern="/**" access="hasRole('IS_AUTHENTICATED_ANONYMOUSLY')" />-->
+		<!--<intercept-url pattern="/auth/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
+	<!--	<intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />-->
+		<!--IS_AUTHENTICATED_ANONYMOUSLY-->
+		<intercept-url pattern="/auth/login" access="permitAll"/>
+	    <intercept-url pattern="/home/**"  access="hasRole('ROLE_ADMIN,ROLE_EXPERT,ROLE_CHARGE')" />
 		<!-- 配置此处应注意先后顺序，从最严格到宽松匹配 -->
 		<intercept-url pattern="/admin/**" access="ROLE_ADMIN" />
 		<!-- 专家管理员 -->
 		<intercept-url pattern="/expert/**" access="ROLE_EXPERT" />
 		<!-- 业务管理员 -->
-		<intercept-url pattern="/sales/**" access="ROLE_SALES" />
-		<intercept-url pattern="/property/**" access="ROLE_SALES" />
-        <access-denied-handler error-page='/403.jsp' />
+		<intercept-url pattern="/sales/**" access="ROLE_CHARGE" />
+		<intercept-url pattern="/property/**" access="ROLE_CHARGE" />
+		<intercept-url  pattern="/kindergarten/**" access="ROLE_ADMIN" />
 
-		<logout invalidate-session="true" logout-success-url="/login.jsp"
-			logout-url="/j_spring_security_logout" />
+		<!--<intercept-url pattern="/resources/**" access="permitAll" />-->
+		<!--<intercept-url pattern="/randomcode" access="permitAll" />-->
+		<!--<intercept-url pattern="/validateCode" access="permitAll" />-->
+		<!--<intercept-url pattern="/auth/login" access="permitAll" />-->
+        <access-denied-handler error-page='/403.jsp' />
+		<!--<intercept-url pattern="/**" access="authenticated"/>-->
+		<logout invalidate-session="true" logout-success-url="/login.jsp" logout-url="/j_spring_security_logout" />
+		<!--successForwardUrl("/login-success");   //登录成功后跳转-->
+
+		<logout />
 
 		<form-login login-page='/login.jsp'
-			authentication-success-handler-ref="loginSuccessHandler" />
-		<logout />
-		 <!-- 
-         invalid-session-url:session过期后跳转的页面 
-         max-sessions：可以创建几个用户 
-         error-if-maximum-exceeded="true" 禁止第二次登录 
-         session-fixation-protection：防止伪造的session攻击 
-         --> 
-		<session-management invalid-session-url="/login.jsp" session-fixation-protection="none" > 
-            <concurrency-control max-sessions="4" error-if-maximum-exceeded="true" /> 
-        </session-management> 
+					login-processing-url="/auth/login"
+					username-parameter="username"
+					password-parameter="password"
+					authentication-failure-handler-ref="loginFailureHandler"
+		/>
+
+		<!--authentication-success-handler-ref="loginSuccessHandler"-->
+		<!--authentication-failure-handler-ref="loginFailureHandler"-->
+		 <!--
+         invalid-session-url:session过期后跳转的页面
+         max-sessions：可以创建几个用户
+         error-if-maximum-exceeded="true" 禁止第二次登录
+         session-fixation-protection：防止伪造的session攻击
+         -->
+		<session-management invalid-session-url="/login.jsp" session-fixation-protection="none" >
+            <concurrency-control max-sessions="4" error-if-maximum-exceeded="true" />
+        </session-management>
+
+
+		<!-- 通过配置custom-filter来增加过滤器，before="FILTER_SECURITY_INTERCEPTOR"表示在SpringSecurity默认的过滤器之前执行。 -->
+		<custom-filter ref="authenticationFilter" after="FILTER_SECURITY_INTERCEPTOR" />
+
+
+		<session-management invalid-session-url="/login.jsp"  session-fixation-protection="none" >
+			<concurrency-control   max-sessions="4"  error-if-maximum-exceeded="true" />
+		</session-management>
+		<csrf disabled="true"/>
+
 	</http>
-	
-	<!-- 用户查询服务类 -->
-	<beans:bean id="userDetailsService"
-		class="com.xqx.frame.security.UserDetailsServiceImpl" />
+
+
+	<beans:bean id="TokenHandleInterceptor"  class="com.xqx.frame.security.TokenHandleInterceptor" />
+	<beans:bean id="authenticationFilter" class= "org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+		<beans:property name ="authenticationManager" ref="authenticationManager"/>
+	</beans:bean>
+
+	<beans:bean id="SystemSessionInterceptor" class="com.xqx.frame.security.SystemSessionInterceptor" />
+	 <!--用户查询服务类-->
+	<beans:bean id="userDetailsService" class="com.xqx.frame.config.auth.CustomUserDetailsServiceImpl" />
+	<!--<beans:bean id="userDetailsService"-->
+		<!--class="com.xqx.frame.security.UserDetailsServiceImpl" />-->
 	<!-- 密码验证  -->
-	<beans:bean name="bcryptEncoder"
-		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
-		
+	<beans:bean name="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+	<!--<authentication-manager alias="authenticationManager">-->
+		<!--<authentication-provider user-service-ref="userDetailsService"/>-->
+	<!--</authentication-manager>-->
 	<authentication-manager alias="authenticationManager">
 		<authentication-provider ref="authenticationProvider" />
 		<authentication-provider user-service-ref="userDetailsService">
@@ -48,18 +93,21 @@
 		</authentication-provider>
 	</authentication-manager>
 
+
+
 	<!-- 自定义用户验证返回消息 -->
 	<beans:bean id="authenticationProvider"
 		class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
 		<beans:property name="userDetailsService" ref="userDetailsService" />
-		<beans:property name="hideUserNotFoundExceptions"
-			value="false" />
+		<beans:property name="hideUserNotFoundExceptions" value="false" />
+		<beans:property name="saltSource" ref="saltSource" />
 	</beans:bean>
-
+	<beans:bean id="saltSource" class="org.springframework.security.authentication.dao.ReflectionSaltSource">
+		<beans:property name="userPropertyToUse" value="username"/>
+	</beans:bean>
 	<!-- 自定义登录成功后置处理器 -->
 	<beans:bean id="loginSuccessHandler" class="com.xqx.frame.security.LoginSuccessHandler" />
-
+	<beans:bean id="loginFailureHandler" class="com.xqx.frame.security.loginFailureHandler" />
 	<!-- 标签中的表达式支持 -->
-	<beans:bean id="webexpressionHandler"
-		class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
-</beans:beans>   
+	<beans:bean id="webexpressionHandler" class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
+</beans:beans>
