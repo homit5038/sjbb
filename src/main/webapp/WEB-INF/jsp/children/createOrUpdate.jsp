@@ -8,13 +8,14 @@
 <html>
 <head>
 <jsp:include page="/WEB-INF/jsp/public/header.jsp"></jsp:include>
+<link href="${ctx}/resources/zui/lib/datetimepicker/datetimepicker.min.css" rel="stylesheet">
+<link href="${ctx}/resources/zui/lib/datatable/zui.datatable.min.css" rel="stylesheet">
 <style type="text/css">
 
 </style>
 <script type="text/javascript">
 
 	$(function() {
-	
 		var msg = "${msg}";
 		if(msg=="exist"){
 			$("#expertNameErr").html("该专家已在库中存在");
@@ -23,6 +24,20 @@
 			parent.refresh();
 		}
 	   
+		$(".form-date").datetimepicker(
+				{
+				    language:  "zh-CN",
+				    weekStart: 1,
+				    todayBtn:  1,
+				    autoclose: 1,
+				    todayHighlight: 1,
+				    startView: 2,
+				    minView: 2,
+				    forceParse: 0,
+				    format: "yyyy-mm-dd"
+				});
+		
+		
 	    
 	});
     
@@ -69,9 +84,12 @@
 					<tr height="40px">
 					<td width="220px" align="right"><span class="err">*</span>独生子女否:</td>
 					<td >
-					
-					<form:radiobutton path="onlyChild" value="1"   label="男"/>
-                    <form:radiobutton path="onlyChild" value="0"  label="女"/>
+
+
+						<form:input path="kindergarten.id"  type="hidden"/>
+
+					<form:radiobutton path="onlyChild" value="1"   label="是"/>
+                    <form:radiobutton path="onlyChild" value="0"  label="否"/>
  
 							  
 						</td>
@@ -123,7 +141,7 @@
 		   <tr height="40px">
 					<td  align="right"><span class="err">*</span>年级:
 					<td >
-			   <form:select path="grade.id" id="type" onchange=""
+			   <form:select path="grade.id" id="childGradeId"   onchange="getClass()"
 							cssClass="form-control" style="width:320px">
 							<form:option value="-1">请选择</form:option>
 							<c:forEach items="${grade}" var="grade">
@@ -136,7 +154,7 @@
                    <tr height="40px">
 					<td  align="right"><span class="err">*</span>班级:
 					<td >
-			   <form:select path="classe.id" id="type" onchange=""
+			   <form:select path="classe.id" id="childClassId" onchange=""
 							cssClass="form-control" style="width:320px">
 							<form:option value="-1">请选择</form:option>
 							<c:forEach items="${classe}" var="classe">
@@ -155,7 +173,7 @@
                    <tr height="40px">
 					<td  align="right"><span class="err">*</span>生日:
 					<td ><form:input path="childBirthday"  id="childBirthday"
-								cssClass="form-control" onclick="SelectDate(this,'yyyy-MM-dd')" type="" style="width:320px" /></td>
+								cssClass="form-control form-date"  type="" style="width:320px" /></td>
 					</tr>	
                 	
 	
@@ -192,8 +210,8 @@
 					</tr>	
 				<tr height="40px">
 					<td  align="right"><span class="err">*</span> 入园时间:
-					<td ><form:input path="childInGartenDate"  onclick="SelectDate(this,'yyyy-MM-dd')" id="childInGartenDate"
-								cssClass="form-control" readonly="true" style="width:320px" /></td>
+					<td ><form:input path="childInGartenDate"   id="childInGartenDate"
+								cssClass="form-control form-date" readonly="true" style="width:320px" /></td>
 					</tr>	
 				<tr height="40px">
 					<td  align="right"><span class="err">*</span>考勤卡号:
@@ -205,8 +223,8 @@
 					<td >
 					
 					
-					<form:input path="childBirthday" onclick="SelectDate(this,'yyyy-MM-dd')" id="childBirthday"
-								cssClass="form-control" readonly="true" style="width:320px" />
+					<form:input path="childBirthday"  id="childBirthday"
+								cssClass="form-control form-date" readonly="true" style="width:320px" />
 
 								
 								
@@ -235,7 +253,21 @@
 					<td  align="right"><span class="err">*</span>收费项:
 					<td >
 					
-					<form:input   type="hidden" path="chargConnection" id="chargConnection"	/>
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					<form:input   type="text" path="chargConnection" id="chargConnection"	/>
 					<table class="table table-bordered table-condensed" id="kinder-list-table">
 				<c:choose>
 					<c:when test="${num==0}">
@@ -292,12 +324,19 @@
 			</table>
 		</div>
 	</form:form>
-	<jsp:include page="/WEB-INF/jsp/public/modal.jsp"></jsp:include>
-	<script type="text/javascript" src="https://www.jqiyun.cn/theme/plugins/zui/js/zui.min.js"></script>
-	
+<jsp:include page="/WEB-INF/jsp/public/modal.jsp"></jsp:include>
+<script type="text/javascript" charset="utf-8" src="${ctx}/resources/zui/lib/datatable/zui.datatable.js"></script>
+<script src="${ctx}/resources/zui/lib/datetimepicker/datetimepicker.min.js"></script>
+<script type="text/javascript" src="${ctx}/resources/zui/js/zui.minn.js"></script>
+
 </body>
 </html>
+
+
+
 <script type="text/javascript">
+
+
 $("#kinder-list-table").datatable({
 		checkable : true,
 		storage:false,
@@ -308,4 +347,22 @@ $("#kinder-list-table").datatable({
 	}
 );
 
+
+function getClass(){
+	var gradeId = document.getElementById("childGradeId").value;
+	var classId = document.getElementById('childClassId');
+	jQuery.ajax({
+		   url: '/youer/classe/queryclassbygradeid',
+		   data:'gradeId='+gradeId,
+		   method:'post',
+		   dataType:'json',
+		   success:function(datas){
+			   $("#childClassId").empty();
+                var msg = datas;
+                for(var i in msg.data){
+                	classId.options.add(new Option(msg.data[i][1],msg.data[i][0]));//根据返回的数据新增option标签并且赋值 
+				   }
+		   }
+	   });
+}
 	</script>

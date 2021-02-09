@@ -69,8 +69,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			} 
 			// 将认证码存入SESSION 
 			session.setAttribute("randcode",sRand);
-			g.dispose();
 			ImageIO.write(image, "JPEG", response.getOutputStream());
+		
 		%>
   </body>
+  
+  <%
+
+	String randcodes = (String) session.getAttribute("randcode");
+	System.out.println(randcodes);
+  %>
+  
 </html>

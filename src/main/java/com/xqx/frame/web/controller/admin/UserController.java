@@ -1,9 +1,14 @@
 package com.xqx.frame.web.controller.admin;
 
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
-
+import com.xqx.frame.exception.ParameterCheckException;
+import com.xqx.frame.model.TUser;
+import com.xqx.frame.security.RoleType;
+import com.xqx.frame.security.SecurityUtil;
+import com.xqx.frame.service.UserManager;
+import com.xqx.frame.util.Randomcode;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -11,19 +16,15 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.xqx.frame.exception.ParameterCheckException;
-import com.xqx.frame.model.TUser;
-import com.xqx.frame.security.RoleType;
-import com.xqx.frame.security.SecurityUtil;
-import com.xqx.frame.service.UserManager;
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.io.IOException;
 
 /**
  * 
@@ -41,6 +42,11 @@ public class UserController {
 	@Autowired
 	private UserManager userManager;
 
+
+	@Autowired
+	@Qualifier("randomcode")
+	private Randomcode randomcode;
+
 	/**
 	 * 验证用户名是否存在
 	 * 
@@ -52,12 +58,60 @@ public class UserController {
 	public String validateLoginName(String loginName) {
 		String result = "no";
 		TUser user = userManager.findTUserByLoginName(loginName);
+		//List<TKindergarten> tk=user.getKindergarten();
 		if (user == null) {
 			result = "ok";
 		}
 		return result;
 	}
 
+	
+	
+	
+	
+	
+	@RequestMapping("/randomcode")
+	public void randomcode(HttpServletRequest request, HttpServletResponse response){
+		try {
+			ImageIO.write(randomcode.createImage(request), "jpg", response.getOutputStream());  
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally{
+			try {
+				response.getOutputStream().close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
+
+	@ResponseBody
+	@RequestMapping("/randomcodes")
+	public Object randomcodes(HttpServletRequest request, HttpServletResponse response,HttpSession session){
+		JSONObject jsonObj = new JSONObject();
+		try {
+
+			jsonObj.put("sessionid",(String) session.getId());
+			jsonObj.put("img", ImageIO.write(randomcode.createImage(request), "jpg", response.getOutputStream()));
+			jsonObj.put("result", "no");
+			
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally{
+			try {
+				response.getOutputStream().close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return jsonObj;
+	}
+	
+	
+	
 	/**
 	 * 验证验证码
 	 * 
@@ -67,14 +121,50 @@ public class UserController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/validateCode", method = RequestMethod.POST)
-	public String validateCode(String fCode, HttpSession session) {
+	public String validateCode(String fCode, HttpServletRequest request,HttpSession session) {
 		String result = "no";
-		String randcode = (String) session.getAttribute("randcode");
-		if (fCode.equals(randcode)) {
+		//String randcode = (String) session.getAttribute("randcode");
+/*		if (fCode.equals(randcode)) {
 			result = "ok";
 		}
+		*/
+		String randcode=randomcode.getCode(request);
+		if (randomcode.getCode(request).equalsIgnoreCase(fCode)) {
+			result = "ok";
+			
+		}
+		
 		return result;
 	}
+	
+	
+	
+	
+	
+	/**
+	 * 验证验证码
+	 * 
+	 * @param fCode
+	 * @param session
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/wxvalidateCode",method = RequestMethod.POST)
+	public Object wxvalidateCode(String fCode, HttpServletRequest request, HttpSession session) {
+	
+		JSONObject jsonObj = new JSONObject();
+		
+		String randcode = randomcode.getCode(request);
+		jsonObj.put("sessionid",(String) session.getId());
+		jsonObj.put("result", "no");
+
+		if (fCode.equals(randcode)) {
+			jsonObj.put("result", "ok");
+		}
+		return jsonObj;
+	}
+	
+	
 
 	/**
 	 * ajax验证用户密码
@@ -94,6 +184,15 @@ public class UserController {
 		}
 	}
 
+	/**
+	 * 初始化密码修改表单
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String login() {
+		return "/login";
+	}
 	/**
 	 * 初始化密码修改表单
 	 * 
@@ -160,7 +259,7 @@ public class UserController {
 	 * 删除用户
 	 * 
 	 * @param id
-	 * @param userType
+
 	 * @return
 	 */
 	@ResponseBody
@@ -232,6 +331,7 @@ public class UserController {
 	public String list(@PageableDefault(page = 0, size = 10, sort = { "updateLastTime" }, direction = Direction.DESC) Pageable p,
 			Model m) {
 		Page<TUser> users = userManager.findUserList(null, null, null, null, null, p);
+	
 		m.addAttribute("size", p.getPageSize());
 		m.addAttribute("page", p.getPageNumber());
 		m.addAttribute("num", users.getTotalElements());
@@ -242,12 +342,7 @@ public class UserController {
 
 	/**
 	 * 用户查询
-	 * 
-	 * @param p
-	 * @param userType
-	 * @param isAccountNonLocked
-	 * @param fLoginName
-	 * @param fUserName
+
 	 * @param beginTime
 	 * @param endTime
 	 * @param m
@@ -336,4 +431,28 @@ public class UserController {
 		}
 		return result;
 	}
+
+	/**
+	 * 功能说明: 登录
+	 *
+	 * @param username  用户名
+	 * @param password  密码
+	 * @return com.lwx.dto.Result
+	 * @author 黄邦荣
+	 * @date 2019/8/21 11:47
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/auth/login",  method = RequestMethod.POST)
+	public Object login(HttpServletRequest request,String username,String password, HttpSession session){
+		System.out.println("========4444============"+username+password);
+		session.setAttribute("userId",userManager.findTUserByLoginName(username));
+		String sessionId = request.getSession().getId();
+
+		request.getSession().setAttribute("JSESSIONID", sessionId);
+        request.getSession().setAttribute("user", username);
+		return  userManager.login(username,password);
+
+	}
+
+
 }

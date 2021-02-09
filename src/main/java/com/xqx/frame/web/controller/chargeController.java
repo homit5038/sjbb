@@ -1,14 +1,17 @@
 package com.xqx.frame.web.controller;
 
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.xqx.frame.dao.TChildrenDao;
+import com.xqx.frame.dao.TClasseDao;
+import com.xqx.frame.dao.TPayedInfoDao;
+import com.xqx.frame.dao.TchargeItemDao;
+import com.xqx.frame.exception.ParameterCheckException;
+import com.xqx.frame.form.PageQueryResult;
+import com.xqx.frame.form.PlayDeaFinfo;
+import com.xqx.frame.form.PlayQueryVO;
+import com.xqx.frame.model.*;
+import com.xqx.frame.security.SecurityUtil;
+import com.xqx.frame.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
@@ -17,47 +20,24 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.xqx.frame.dao.TChildrenDao;
-import com.xqx.frame.dao.TClasseDao;
-import com.xqx.frame.dao.TPayedInfoDao;
-import com.xqx.frame.dao.TchargeItemDao;
-import com.xqx.frame.exception.ParameterCheckException;
-import com.xqx.frame.form.PageQueryResult;
-import com.xqx.frame.form.PlayQueryVO;
-
-
-import com.xqx.frame.model.Payetyped;
-import com.xqx.frame.model.Periodic;
-
-import com.xqx.frame.model.TChargeItem;
-import com.xqx.frame.model.TChildren;
-import com.xqx.frame.model.TClasses;
-
-import com.xqx.frame.model.TGrade;
-import com.xqx.frame.model.TPayedInfo;
-import com.xqx.frame.model.TUser;
-
-import com.xqx.frame.security.SecurityUtil;
-import com.xqx.frame.service.ChargeItemService;
-import com.xqx.frame.service.ChildrenService;
-import com.xqx.frame.service.FileService;
-import com.xqx.frame.service.GradeService;
-import com.xqx.frame.service.TPayedInfoService;
 
 @Controller
 @RequestMapping("/charge")
 public class chargeController {
 	private static final String Payetype = null;
+
 	@Autowired
 	ChildrenService childrenService;
 	@Autowired
@@ -105,19 +85,97 @@ public class chargeController {
 	}
 
 
+
 	
+	/*
+	 * 收费统计按天统计
+	 */
+	
+	@RequestMapping(value = "/statistics")
+    public String chargeStatistics(Model m,@RequestParam(defaultValue="2019-04-17") String date,HttpServletRequest request) throws ParseException{
+		
+		
+		String paytype = request.getParameter("paytype");
+	
+		
+		Payetyped paytypas = Payetyped.get(paytype);
+		
+	
+		
+		//Date date1 = DateTimeFormat.forPattern("yyyy-MM-dd").parseDateTime(Validator.isNull(startDate)?"2000-01-01":startDate).toDate();
+		//Date date2 = Validator.isNull(endDate) ? (new DateTime().plusYears(10).toDate()):DateTimeFormat.forPattern("yyyy-MM-dd").parseDateTime(endDate).plusDays(1).toDate();
+		
+			SimpleDateFormat sdf = new SimpleDateFormat(
+					"yyyy-MM-dd HH:mm:ss");
+			
+			Date stardate=sdf.parse(date+" 00:00:00");
+            Date enddate=sdf.parse(date+" 23:59:59");
+               
+		
+            
+		List<TPayedInfo>  lists = payedinfoservice.findAll(paytypas,stardate,enddate);
+		List<String> counts=payedinfoDao.payedInfoStaticonut(paytypas,stardate,enddate);
+        Long sumt=payedinfoDao.payedInfoStatisum(paytypas,stardate,enddate);
+    
+        long numberOfEnemies = sumt!=null?sumt:0;
+        
+		Payetyped[] Payed = Payetyped.values();
+		m.addAttribute("data", lists);
+		
+		m.addAttribute("counts", counts.size());
+		m.addAttribute("sumt", numberOfEnemies);
+		m.addAttribute("Payed", Payed);
+		return "/charge/statistics";
+	}
+	
+	
+	/*
+	 * 
+	 * 查询选中学生缴费记录
+	 */
+
+	
+	
+	@RequestMapping(value = "/historyinfo")
+    public String historyinfo(Model m,HttpServletRequest request){
+	    String id = request.getParameter("id");
+		List<TPayedInfo>  lists=payedinfoDao.payedInfoStatiConut(Long.valueOf(id));
+		m.addAttribute("data", lists);
+		return "/charge/selectchildhistoryinfo";
+	}
+	
+	
+	
+
+
+
+/*
+	@RequestMapping(value = "/{id}/selectchildhistoryinfo")
+    public String selectChildHistoryInfo(Model m,@PathVariable Long id,HttpServletRequest request){
+
+
+		//List<TPayedInfo>  lists=payedinfoDao.payedInfoStatiConut(id);
+		//m.addAttribute("data", lists);
+
+		return "/charge/selectchildhistoryinfo";
+	}
+	*/
+
+	/*
+	 * 缴费信息列表
+	 */
 	@RequestMapping(value = "/chargelist")
     public String chargelist(Model m,
 				//SessionStatus sessionStatus,
 				@PageableDefault(page = 0, size = 10,direction = Direction.DESC) Pageable p,HttpServletRequest request){
-	
-		
 		String name = request.getParameter("childName");
+		String beginTime = request.getParameter("beginTime");
+		m.addAttribute("beginTime",beginTime);
+		String endTime = request.getParameter("endTime");
+		m.addAttribute("endTime", endTime);
 		List<TClasses> classe=classesService.findAll();
 		List<TGrade> grade=gradeService.findAll();
-
-		
-		Page<TPayedInfo> list = payedinfoservice.findAll(name,p);
+		Page<TPayedInfo> list = payedinfoservice.findAll(name,beginTime,endTime,p);
 		m.addAttribute("classe", classe);
 		m.addAttribute("grade", grade);
 		m.addAttribute("size", p.getPageSize());
@@ -125,11 +183,10 @@ public class chargeController {
 		m.addAttribute("num", list.getTotalElements());
 		m.addAttribute("data", list);
 		m.addAttribute("method", "get");
-
 		return "/charge/list";
 	}
-	
-	
+
+
 	@ResponseBody
 	@RequestMapping(value = "/findChildHistory", method = RequestMethod.GET)
 	public Object findChildHistory(HttpServletRequest request){
@@ -146,8 +203,37 @@ public class chargeController {
 
 	
 	
-	
-	
+	@ResponseBody
+	@RequestMapping(value = "/findHistoryprints", method = RequestMethod.POST)
+	public PlayDeaFinfo findHistoryprints(HttpServletRequest request){
+		Long cid = Long.valueOf(request.getParameter("cid"));
+		
+		System.out.print("==========================");
+		PlayDeaFinfo  info = payedinfoservice.getTPayeddeafultInfo(cid);
+
+		
+		return  info;
+		
+
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/del", method = RequestMethod.POST)
+	public String deletePayed(String id) throws ParameterCheckException {
+		String Stats= "ok";
+		 id = id.trim();
+	        String[] arr = id.trim().split(",");
+	        for (String item : arr){
+	        	 if(!StringUtils.isEmpty(item)){
+	                Long baId = Long.parseLong(item);
+	                payedinfoservice.deleteTPayedInfo(baId);
+	                Stats= "ok";
+	            }else {
+	            	Stats= "no";
+	            }
+	        }
+	      return Stats;
+	}
 	
 	/**
 	 * 删除收费记录
@@ -170,7 +256,6 @@ public class chargeController {
 
 	@ResponseBody
 	@RequestMapping(value = "/addchargepay")
-	
 	public String addChargePay(HttpServletRequest request){
 		//payedinfoDao.save(choose);charge-real-pay
 		TUser user = (TUser) SecurityUtil.getCurrentUser();

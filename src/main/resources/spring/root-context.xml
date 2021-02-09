@@ -51,13 +51,14 @@
     <!-- jpa配置 -->
 	<bean id="jpaVendorAdapter"
 		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
-
+ <bean id="randomcode" class="com.xqx.frame.util.Randomcode"/>
+	
 	<!-- jpa entity manager factory -->
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
-		
+
 		<property name="persistenceUnitName" value="frame" />
 		<property name="packagesToScan" value="com.xqx.frame.model" />
 		<property name="jpaProperties">

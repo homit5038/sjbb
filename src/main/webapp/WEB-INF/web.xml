@@ -5,7 +5,7 @@
   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
   <display-name>zjk</display-name>
   <welcome-file-list>
-    <welcome-file>login.jsp</welcome-file>
+    <welcome-file>/login</welcome-file>
   </welcome-file-list>
   <context-param>
     <param-name>contextConfigLocation</param-name>
@@ -14,6 +14,14 @@
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
+
+
+  <!--<listener>-->
+    <!--<listener-class>com.xqx.frame.security.SystemSessionInterceptor</listener-class>-->
+  <!--</listener>-->
+  <!--<listener>-->
+    <!--<listener-class>com.xqx.frame.security.TokenHandleInterceptor</listener-class>-->
+  <!--</listener>-->
   <listener>
     <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
   </listener>
@@ -58,12 +66,12 @@
     <filter-name>HiddenHttpMethodFilter</filter-name>
     <servlet-name>Spring MVC</servlet-name>
   </filter-mapping>
-   <error-page>
+<!--    <error-page>
 	    <error-code>404</error-code>
 	    <location>/404.jsp</location>
 	</error-page>
 	<error-page>
 	    <error-code>500</error-code>
 	    <location>/500.jsp</location>
-	</error-page>
+	</error-page> -->
 </web-app>

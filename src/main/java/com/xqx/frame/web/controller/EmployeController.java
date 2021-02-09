@@ -5,23 +5,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.lang.model.element.NestingKind;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.poi.ss.formula.functions.T;
+import com.xqx.frame.model.TKindergarten;
+import com.xqx.frame.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,9 +47,7 @@ import com.xqx.frame.dao.TExpertDao;
 import com.xqx.frame.dao.TGradeDao;
 import com.xqx.frame.exception.ParameterCheckException;
 import com.xqx.frame.form.PageQueryResult;
-import com.xqx.frame.form.PageableQueryObject;
 import com.xqx.frame.form.QueryResult;
-import com.xqx.frame.form.ResultMap;
 import com.xqx.frame.model.SexType;
 import com.xqx.frame.model.TEmploye;
 import com.xqx.frame.model.query.employeQuery;
@@ -55,6 +55,9 @@ import com.xqx.frame.service.ClassesService;
 import com.xqx.frame.service.EmployeService;
 import com.xqx.frame.service.FileService;
 import com.xqx.frame.util.PubUtil;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 /*@RunWith(SpringJUnit4ClassRunner.class)  
 @ContextConfiguration(locations={"classpath*:/spring/root-context.xml"})*/
 @Controller
@@ -114,12 +117,13 @@ public class EmployeController {
     
     
 	/**
-	 * 初始化新增专家
+	 * 初始化新增职工
 	 * @param m
 	 * @return
 	 */
 	@RequestMapping(value = "/new",method=RequestMethod.GET)
 	public String newEmploye(Model m){
+
 		TEmploye employe = new TEmploye();
 		m.addAttribute("employe", employe);
 		m.addAttribute("sexType", SexType.values());
@@ -127,26 +131,31 @@ public class EmployeController {
 		return "/employe/createOrUpdate";
 	}
 
+
+
 	/**
-	 * 新增专家
-	 * @param m
-	 * @param expert
-	 * @return
+	 * 保存职工信息
 	 * @throws ParameterCheckException
 	 */
 	@RequestMapping(value = "/new",method=RequestMethod.POST)
-	public String newClass(Model m,@ModelAttribute("employe") TEmploye employe,BindingResult bind, SessionStatus status,@RequestParam("photoDir") MultipartFile multipartFile) throws ParameterCheckException,IOException{
-		
-		
+	public String newClass(Model m,
+						   HttpServletRequest request,
+						   @ModelAttribute("employe") TEmploye employe,BindingResult bind, SessionStatus status,@RequestParam("photoDir") MultipartFile multipartFile) throws ParameterCheckException,IOException{
 		//bindern.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
-		
-		
 		//employe.setInGartenDate(new Date());
 		//employe.setBirthday(new Date());
+
+
+		Object topId=request.getSession().getAttribute("topId");
+		if (!Validator.isNull(topId)) {
+			long topIds=Long.valueOf(topId.toString());
+			TKindergarten kindergarten=new TKindergarten();
+			kindergarten.setId(topIds);
+			employe.setKindergarten(kindergarten);
+		}
+
 		employe.setPhotoDir(fileservice.upphote(multipartFile));
 		String saveMsg = employeSerivce.saveEmploye(employe);
-
-		     
 		if("exist".equals(saveMsg)){
 			m.addAttribute("msg", "exist");
 			return "/employe/createOrUpdate";
@@ -154,6 +163,290 @@ public class EmployeController {
 			return "redirect:/employe/list";
 		}
 	}
+
+
+
+
+
+
+	@ResponseBody
+	@RequestMapping(value = "/wxedit",method=RequestMethod.GET)
+	public TEmploye wxnewEmploye(Model m){
+		TEmploye employe = new TEmploye();
+		return employe;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/wxedit/{id}", method = RequestMethod.GET)
+	public TEmploye wxedit(@PathVariable Long id) {
+		TEmploye employe;
+		if (!PubUtil.isEmpty(id) && -1L != id) {
+			 employe=employeSerivce.findEmployeById(id);
+		} else {
+			 employe=new TEmploye();
+		
+		}
+		//SexType sexType=SexType.values();
+		
+	
+		
+		return employe;
+	}
+
+
+
+
+
+@ResponseBody
+@RequestMapping(value = "/weixinupice",method=RequestMethod.POST)
+public JSONObject mnewsaveClass(@RequestParam("photoDir") MultipartFile photoDir,HttpServletRequest request) throws  ParameterCheckException,IOException{ 
+	//System.out.println("<br/>============="+fileservice.upphote(photoDir)+"==============================");
+	JSONObject jsonObj = new JSONObject();
+	  String usersp=request.getParameter("user");
+	jsonObj.put("photoDir",fileservice.upphote(photoDir));
+	jsonObj.put("users",usersp);
+	return jsonObj;
+}
+
+
+	@ResponseBody
+	@RequestMapping(value = "/createui", method = RequestMethod.POST, consumes="application/json", produces="application/json")
+	public String addUsers(@RequestBody TEmploye employe) throws ParameterCheckException {
+		String result;
+		String saveMsg = employeSerivce.saveEmploye(employe);
+		if("exist".equals(saveMsg)){
+			result = "no";
+		}else{
+			result = "ok";
+		}
+		return result;
+	}
+
+/*
+	@ResponseBody
+	@RequestMapping(value = "/createui", method = RequestMethod.POST, consumes="application/json", produces="application/json")
+	public String addemploye(@RequestBody TEmploye employe) throws ParameterCheckException {
+		String result;
+		String saveMsg = employeSerivce.saveEmploye(employe);
+		if("exist".equals(saveMsg)){
+			result = "no";
+		}else{
+			result = "ok";
+		}
+		return result;
+	}
+*/
+
+
+@ResponseBody
+@RequestMapping(value = "/create",method=RequestMethod.POST,produces = "text/json;charset=UTF-8")
+public String mnewsaveClass(@RequestParam Map<String, String> params,@RequestBody JSONObject body) throws ParameterCheckException{ 
+//public TKindergarten login(@RequestBody TKindergarten params) {
+	// @RequestBody  Map<String, Object> params//
+	//String kindergartennames=params.getKindergartenname();
+	//String principal=params.getPrincipal();
+   // String Kindergartenname=request.getParameter("params");
+	DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");     
+	String result = "no";
+	JSONObject jObject = new JSONObject();
+	JSONObject json = JSONObject.fromObject(body);
+	//JSONArray jsonArray=json.getJSONArray("params");
+	//JSONArray jsonArrays=json.getJSONArray("academicQualification");
+	
+	JSONArray jsonArray=json.getJSONArray("academicQualification");
+	JSONArray sexTypejsonArray=json.getJSONArray("sexType");
+
+	
+	
+	System.out.println("============="+jsonArray.getJSONObject(3).get("id"));
+	Date now = new Date();
+	//json=jsonArray.getJSONObject(0);
+	//jsonArray.getString("employeName");
+	Long countryInde=Long.valueOf(json.getString("countryIndex"));
+	TEmploye employe=new TEmploye();
+	employe.setEmployeName(json.getString("employeName"));
+	employe.setGraduateSchool(json.getString("graduateSchool"));
+	employe.setEmployeEmail(json.getString("employeEmail"));
+	String academicQualificationid = null;
+	String sexTypeid = null;
+	if(jsonArray.size()>0){
+//	    for (java.util.Iterator tor=backBodyJson.iterator();tor.hasNext();) {
+//	    JSONObject job = (JSONObject)tor.next();
+//	    System.out.println(job.get("name"));
+//	    System.out.println(job.get("age"));
+//	    }
+			for(int i=0;i<jsonArray.size();i++){
+				System.out.println("============="+jsonArray.getJSONObject(i).get("checked"));
+				if((boolean) jsonArray.getJSONObject(i).get("checked")) {
+					 academicQualificationid=jsonArray.getJSONObject(i).getString("id");
+					 
+				}
+	
+			}
+	}
+	if(sexTypejsonArray.size()>0){
+			for(int i=0;i<sexTypejsonArray.size();i++){
+				System.out.println("============="+sexTypejsonArray.getJSONObject(i).get("checked"));
+				if((boolean) sexTypejsonArray.getJSONObject(i).get("checked")) {
+					sexTypeid=sexTypejsonArray.getJSONObject(i).getString("id");
+					 
+				}
+	
+			}
+	}
+	employe.setAcademicQualification(academicQualificationid);
+	employe.setSexType(sexTypeid);
+	employe.setIdcardNumber(json.getString("idcardNumber"));
+	employe.setJobNumber(json.getString("jobNumber"));
+	employe.setDwellingPlace(json.getString("dwellingPlace"));
+	employe.setNation(json.getString("nation"));
+	employe.setPhotoDir(json.getString("photoDir"));
+	String inGartenDate=json.getString("inGartenDate");
+	String birthday=json.getString("birthday");
+	
+	String beginToWorkDate=json.getString("beginToWorkDate");
+	  try {    
+	        employe.setInGartenDate(format1.parse(inGartenDate));
+	    	employe.setBeginToWorkDate(format1.parse(beginToWorkDate));    
+	    	employe.setBirthday(format1.parse(birthday));
+	 } catch (ParseException e) {    
+	         e.printStackTrace();    
+	  }   
+	employe.setPoliticalBackground(json.getString("politicalBackground"));
+	employe.setBirthPlace(json.getString("birthPlace"));
+	employe.setPhoneNum(json.getString("phoneNum"));
+	employe.setWorkAttendanceCardNumber(json.getString("workAttendanceCardNumber"));
+	String saveMsg = employeSerivce.saveEmploye(employe);
+	if("exist".equals(saveMsg)){
+		result = "no";
+	}else{
+		result = "ok";
+	}
+	//System.out.println("<br/>============="+json.getString("principal")+"==============================");
+	return result;
+}    
+/**
+ * 删除员工信息
+ * 
+ * @param Employe
+ * @return
+ * @throws ParameterCheckException
+ */
+
+@ResponseBody
+@RequestMapping(value = "/wxdelete", method = RequestMethod.POST)
+public String wxDeleteEmploye(HttpServletRequest request) throws ParameterCheckException,IOException {
+	String id=request.getParameter("id");
+	employeSerivce.deleteEmploye(Long.valueOf(id));
+	return "ok";
+}
+
+/**
+ * 处理修改员工信息
+ * 
+ * @param Employe
+ * @return
+ * @throws ParameterCheckException
+ */
+
+@ResponseBody
+@RequestMapping(value = "/wxedit/{id}", method = RequestMethod.POST)
+public String wxeditEmploye(@PathVariable Long id,
+		@RequestParam Map<String, String> params,
+		@RequestBody JSONObject body)
+		throws ParameterCheckException,IOException {
+
+	DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");     
+	String result = "no";
+	JSONObject jObject = new JSONObject();
+	JSONObject json = JSONObject.fromObject(body);
+	//JSONArray jsonArray=json.getJSONArray("params");
+	//JSONArray jsonArrays=json.getJSONArray("academicQualification");
+	
+	JSONArray jsonArray=json.getJSONArray("academicQualificationt");
+	JSONArray sexTypejsonArray=json.getJSONArray("sex");
+
+	
+	
+	
+	Date now = new Date();
+	//json=jsonArray.getJSONObject(0);
+	//jsonArray.getString("employeName");
+	Long countryInde=Long.valueOf(json.getString("countryIndex"));
+	Long tid=Long.valueOf(json.getString("id"));
+	System.out.println("=============wwww"+tid);
+	//TEmploye employe=new TEmploye();
+	TEmploye employe = employeSerivce.findEmployeById(tid);
+	employe.setId(tid);
+	employe.setEmployeName(json.getString("employeName"));
+	employe.setGraduateSchool(json.getString("graduateSchool"));
+	employe.setEmployeEmail(json.getString("employeEmail"));
+	String academicQualificationid = null;
+	String sexTypeid = null;
+	if(jsonArray.size()>0){
+//	    for (java.util.Iterator tor=backBodyJson.iterator();tor.hasNext();) {
+//	    JSONObject job = (JSONObject)tor.next();
+//	    System.out.println(job.get("name"));
+//	    System.out.println(job.get("age"));
+//	    }
+			for(int i=0;i<jsonArray.size();i++){
+				System.out.println("============="+jsonArray.getJSONObject(i).get("checked"));
+				if((boolean) jsonArray.getJSONObject(i).get("checked")) {
+					 academicQualificationid=jsonArray.getJSONObject(i).getString("id");
+					 
+				}
+	
+			}
+	}
+	if(sexTypejsonArray.size()>0){
+			for(int i=0;i<sexTypejsonArray.size();i++){
+				System.out.println("============="+sexTypejsonArray.getJSONObject(i).get("checked"));
+				if((boolean) sexTypejsonArray.getJSONObject(i).get("checked")) {
+					sexTypeid=sexTypejsonArray.getJSONObject(i).getString("id");
+					 
+				}
+	
+			}
+	}
+	employe.setAcademicQualification(academicQualificationid);
+	employe.setSexType(sexTypeid);
+	employe.setIdcardNumber(json.getString("idcardNumber"));
+	employe.setJobNumber(json.getString("jobNumber"));
+	employe.setDwellingPlace(json.getString("dwellingPlace"));
+	employe.setNation(json.getString("nation"));
+	employe.setPhotoDir(json.getString("photoDir"));
+	String inGartenDate=json.getString("inGartenDate");
+	String birthday=json.getString("birthday");
+	
+	String beginToWorkDate=json.getString("beginToWorkDate");
+	  try {    
+	        employe.setInGartenDate(format1.parse(inGartenDate));
+	    	employe.setBeginToWorkDate(format1.parse(beginToWorkDate));    
+	    	employe.setBirthday(format1.parse(birthday));
+	 } catch (ParseException e) {    
+	         e.printStackTrace();    
+	  }   
+	employe.setPoliticalBackground(json.getString("politicalBackground"));
+	employe.setBirthPlace(json.getString("birthPlace"));
+	employe.setPhoneNum(json.getString("phoneNum"));
+	employe.setWorkAttendanceCardNumber(json.getString("workAttendanceCardNumber"));
+	System.out.println("<br/>============="+employe.getGraduateSchool()+"==============================");
+	String saveMsg = employeSerivce.saveEmploye(employe);
+	if("ok".equals(saveMsg)){
+		result = "ok";
+	}else{
+		result = "n5o";
+	}
+	//System.out.println("<br/>============="+json.getString("principal")+"==============================");
+	return saveMsg;
+	
+
+
+}
+
+
+
+
 	
 	@RequestMapping("/lish")
 	public String lish(Model m) {
@@ -174,6 +467,32 @@ public class EmployeController {
 		return new PageQueryResult<>(list);
 		
 	}
+	
+	
+	
+	
+	
+	
+	
+	@ResponseBody
+	@RequestMapping("/wxlist")
+	public Object wxlist(Integer page, Integer limit, employeQuery query){
+		//String name = request.getParameter("employeName");
+		//System.out.println("========================="+p.getPageNumber());
+		Page<TEmploye> list = employeSerivce.findAllt(query,page - 1,limit);
+		return new PageQueryResult<>(list);
+
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@ResponseBody
 	@RequestMapping("/listaja")
 	public Object lish(Integer page, Integer limit, employeQuery query){
@@ -243,7 +562,8 @@ public class EmployeController {
 	}
 
 	
-	@RequestMapping("/{action}")
+/*	@RequestMapping(value = "/{action}",method = RequestMethod.GET)*/
+	@RequestMapping(value = "/layui/{action}",method = RequestMethod.GET)
 	public String forward(Model m, @PathVariable String action, Long id) {
 
 		if (!PubUtil.isEmpty(id) && -1L != id) {
@@ -257,11 +577,9 @@ public class EmployeController {
 	}
 	
 	/**
-	 * 处理修改专家信息
+	 * 处理修改员工信息
 	 * 
-	 * @param expert
-	 * @param bind
-	 * @param status
+	 * @param Employe
 	 * @return
 	 * @throws ParameterCheckException
 	 */
@@ -271,6 +589,7 @@ public class EmployeController {
 		//if (bind.hasErrors()) {
 		//	return "employe/createOrUpdate";
 		//}
+		
 		TEmploye employet = employeSerivce.findEmployeById(id);
 		if (!photoDir.getOriginalFilename().isEmpty()) {
 			
@@ -304,7 +623,8 @@ public class EmployeController {
 	 * @throws ParameterCheckException
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/{action}/{id}")
+/*	@RequestMapping(value = "/{action}/{id}")*/
+	@RequestMapping(value = "/layui/{action}/{id}")
 	public QueryResult<?> addajaxpost(
 			@PathVariable Long id,
 			String action,

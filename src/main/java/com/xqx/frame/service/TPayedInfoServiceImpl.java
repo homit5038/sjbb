@@ -1,18 +1,11 @@
 package com.xqx.frame.service;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
+import com.xqx.frame.dao.TChildrenDao;
+import com.xqx.frame.dao.TPayedInfoDao;
+import com.xqx.frame.form.PlayDeaFinfo;
+import com.xqx.frame.form.PlayQueryVO;
+import com.xqx.frame.model.Payetyped;
+import com.xqx.frame.model.TChildren;
+import com.xqx.frame.model.TPayedInfo;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
@@ -23,15 +16,22 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.xqx.frame.dao.TChildrenDao;
-import com.xqx.frame.dao.TPayedInfoDao;
-import com.xqx.frame.form.PlayQueryVO;
-import com.xqx.frame.model.TChargeItem;
-import com.xqx.frame.model.TChildren;
-
-import com.xqx.frame.model.TPayedInfo;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 @Service
 public class TPayedInfoServiceImpl implements TPayedInfoService {
+
 	@Autowired
 	TPayedInfoDao payedinfoDao;
 	@Autowired
@@ -41,6 +41,7 @@ public class TPayedInfoServiceImpl implements TPayedInfoService {
 	@PersistenceContext
 	private EntityManager entityManager;
 	private Object BigDecimal;
+
 
 	@Override
 	public List<PlayQueryVO> findTPayedInfoByid(Long childId) {
@@ -71,7 +72,7 @@ public class TPayedInfoServiceImpl implements TPayedInfoService {
 	}
 
 	@Override
-	public Page<TPayedInfo> findAll(final String name,Pageable pageable) {
+	public Page<TPayedInfo> findAll(final String name,final String beginTime,final String endTime,Pageable pageable) {
 		
 		return payedinfoDao.findAll(new Specification<TPayedInfo>() {
 			
@@ -82,8 +83,22 @@ public class TPayedInfoServiceImpl implements TPayedInfoService {
                 List<Predicate> predicates = new ArrayList<Predicate>();
                 
                 if(!StringUtils.isEmpty(name)){  
-                    predicates.add(cb.equal(root.get("ItemName"), name));  
+                    predicates.add(cb.equal(root.<TChildren>get("children").<Long>get("childName"), name));  
                 }  
+              
+  
+                if (!StringUtils.isEmpty(beginTime)
+      						&& !StringUtils.isEmpty(endTime)) {
+      					SimpleDateFormat sdf = new SimpleDateFormat(
+      							"yyyy-MM-dd HH:mm:ss");
+      					try {
+      						predicates.add(cb.between(root.<Date> get("createTime"),
+      										sdf.parse(beginTime+" 00:00:00"),
+      										sdf.parse(endTime+" 23:59:59")));
+      					} catch (ParseException e) {
+      						e.printStackTrace();
+      					}
+      				}
                 
                 query.where(predicates.toArray(new Predicate[predicates.size()]));
                 return null;  
@@ -107,7 +122,8 @@ public class TPayedInfoServiceImpl implements TPayedInfoService {
 		if (rows != null && rows.size() > 0) {
 			for (int i = 0; i < rows.size(); i++) {
 				PlayQueryVO ci = new PlayQueryVO();
-				
+
+				ci.setId(rows.get(i).get("id") == null ? 0 :Integer.parseInt(rows.get(i).get("id").toString()));
 				ci.setPaytype(rows.get(i).get("Paytype") == null ? null : rows.get(i).get("Paytype").toString());
 				ci.setChargerealpay(rows.get(i).get("chargerealpay") == null ? null : rows.get(i).get("chargerealpay").toString());
 				ci.setPaytype(rows.get(i).get("paytype") == null ? null : rows.get(i).get("paytype").toString());
@@ -128,7 +144,11 @@ public class TPayedInfoServiceImpl implements TPayedInfoService {
 		return ciVo;
 	}
 	
-	
+	@Override
+	public PlayDeaFinfo getTPayeddeafultInfo(Long PId) {
+		return payedinfoDao.readPayedInfo(PId);
+		
+	}
 	
 	@Override
 	public TChildren findPayedInfoBychildrenId(Long childId) {
@@ -146,6 +166,60 @@ public class TPayedInfoServiceImpl implements TPayedInfoService {
 		return payed;
 	}
 
+	@Override
+	public List<TPayedInfo> findAll(Payetyped paytype,Date stardate,Date enddate) {
+	      
+		
+		return payedinfoDao.payedInfoStatistiss(paytype,stardate,enddate);
+		
+		
+		
+		
+	/*return payedinfoDao.findAll(new Specification<TPayedInfo>() {
+			
+			@Override
+			public Predicate toPredicate(Root<TPayedInfo> root, CriteriaQuery<?> query,
+					CriteriaBuilder cb) {
+				
+                List<Predicate> predicates = new ArrayList<Predicate>();
+                
+                if(!StringUtils.isEmpty(paytype)){ 
+                	predicates.add(cb.equal(
+							root.<Payetyped> get("paytype"),
+							Payetyped.valueOf(paytype)));	
+                  
+                }  
+                
+                
+                if (!StringUtils.isEmpty(date)
+      						&& !StringUtils.isEmpty(date)) {
+      					SimpleDateFormat sdf = new SimpleDateFormat(
+      							"yyyy-MM-dd HH:mm:ss");
+      					try {
+      						 //predicates.add(cb.equal(root.<Date>get("createTime"), sdf.parse(date+" 00:00:00")));
+      						 
+      						predicates.add(cb.between(root.<Date> get("createTime"),
+    								sdf.parse(date+" 00:00:00"),
+    								sdf.parse(date+" 23:59:59")));
+      						 
+      						
+      					} catch (ParseException e) {
+      						e.printStackTrace();
+      					} 
+      	                
+      					
+      					
+      				}
+                
+                query.where(predicates.toArray(new Predicate[predicates.size()]));
+                return null;  
+            }
+		});*/
+		
+	}
+	
+	
+	
 	@Override
 	public List<TPayedInfo> getTPayedInfo(Long extractPepleNum, Long childId) {
 		// TODO Auto-generated method stub

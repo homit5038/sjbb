@@ -5,6 +5,9 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>  
 <c:set var="loginName" value="<%=SecurityUtil.getCurrentUser().getLoginName()%>" />
 <c:set var="id" value="<%=SecurityUtil.getCurrentUser().getId()%>" />
+<%--
+<c:set var="kindergarten" value="<%=SecurityUtil.getCurrentUser().getKindergarten().get(0).getKindergartenname()%>" />
+--%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
 <!DOCTYPE html>
@@ -46,13 +49,14 @@ function editPwd() {
 			<div class="top">
 				<table border=0 width="100%">
 					<tr>
-						<td width="100" align="center" height="90"><img
-							src="${ctx}/resources/img/logo.png"  height="40" /></td>
-						<td  align="left"><h1>估价分会专家库系统</h1></td>
+						<td width="200" align="center" height="90">
+						
+						<img src="${ctx}/resources/img/logo.png"  height="40" /></td>
+						<td  align="left"><h1>${kinderGarteName}收费管理系统${sessionScope.topId}</h1></td>
 						<td align="right" class="useredit">
 						<span class="glyphicon glyphicon-user"></span>${loginName }，欢迎你
 						</td>
-						<td align="right" class="useredit">
+						<td align="right" width="250" class="useredit">
 							<span class="glyphicon glyphicon-lock"></span><a href="javascript:editPwd();">修改密码</a>
 						<span class="glyphicon glyphicon-edit"></span><a href="${ctx}/user/${id }/edit" target="menuFrame">信息修改</a>
 <span class="glyphicon glyphicon-off">
@@ -63,6 +67,8 @@ function editPwd() {
 				</table>
 			</div>
 		</div>
+		
+
 		<!--顶部结束-->
 		<nav class="navbar navbar-default" style="background-color:#ececec;border-top:1px gray solid;border-radius: 0" role="navigation">
 			<div class="container-fluid">
@@ -110,7 +116,13 @@ function editPwd() {
 							<li class="nodown"><a href="${ctx}/log/findAllLog" target="menuFrame">系统日志</a></li>
 						</sec:authorize>
 						
-	            
+	            	   <li class="dropdown"><a href="#" class="dropdown-toggle"
+							data-toggle="dropdown">幼儿园管理<b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="${ctx }/kindergarten/new" target="menuFrame">新增幼儿园</a></li>
+								<li class="divider"></li>
+								<li><a href="${ctx }/kindergarten/list" target="menuFrame">分园列表</a></li>
+							</ul></li>
 						<li class="dropdown"><a href="#" class="dropdown-toggle"
 							data-toggle="dropdown">班级管理<b class="caret"></b></a>
 							<ul class="dropdown-menu">
@@ -152,7 +164,9 @@ function editPwd() {
 								<li class="divider"></li>
 								<li><a href="${ctx }/employe/list" target="menuFrame">职工列表</a></li>	
 								<li><a href="${ctx }/children/list" target="menuFrame">学生列表</a></li>
+								<li><a href="${ctx }/children/childbirthday" target="menuFrame">学生生日</a></li>
 								<li><a href="${ctx }/charge/chargelist" target="menuFrame">学生缴费列表</a></li>
+								<li><a href="${ctx }/charge/statistics" target="menuFrame">收费统计</a></li>
 							</ul>
 							</li>
 					</ul>

@@ -23,6 +23,17 @@ public enum Payetyped {
 		this.describe = describe;
 	}
 	
+	
+	public static Payetyped getByValue(String code) { 
+		for (Payetyped resultcode : values()) {
+			if (resultcode.getName()==code) { 
+				return resultcode; } 
+			} 
+		return null; 
+				
+	} 
+
+	
 	 public static Payetyped get(int v) {
 	        String str = String.valueOf(v);
 	        return get(str);
@@ -56,7 +67,11 @@ public enum Payetyped {
 		this.describe = describe;
 	}
 	
+	public String toString(){
 
+        return this.name.toString();
+
+}
 	
 
 }

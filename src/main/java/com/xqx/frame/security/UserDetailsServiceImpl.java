@@ -15,8 +15,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	UserManager um;
 
 	@Override
-	public UserDetails loadUserByUsername(String loginName)
-			throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String loginName) throws UsernameNotFoundException {
 		TUser tuser = um.findTUserByLoginName(loginName);
 		if (tuser == null) {
 			throw new UsernameNotFoundException("用户名不正确。");

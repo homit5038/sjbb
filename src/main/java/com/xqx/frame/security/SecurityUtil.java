@@ -1,13 +1,14 @@
 package com.xqx.frame.security;
 
-import java.util.Collection;
-
+import com.xqx.frame.model.TUser;
+import com.xqx.frame.service.UserManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 
-import com.xqx.frame.model.TUser;
+import java.util.Collection;
 
 /**
  * 
@@ -18,6 +19,9 @@ import com.xqx.frame.model.TUser;
  * @Description spring security 工具类
  */
 public class SecurityUtil {
+	@Autowired
+	UserManager userManager;
+
 
 	/**
 	 * 获取当前登录用户
@@ -33,6 +37,14 @@ public class SecurityUtil {
 			return null;
 		}
 	}
+
+//	public static TUser getCurrentUserName() {
+//		SimpleAttributeSet session = null;
+//		return (TUser) session.getAttribute("userId");
+//	}
+
+
+
 
 	/**
 	 * 获取当前登录用户

@@ -39,9 +39,10 @@ public class TPaymentrecord extends BaseEntity implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="gradeid")
 	private TGrade grade;//街道办事处
+	private String classesname;
 
-	 
-		public String getClassesname() {
+
+	public String getClassesname() {
 			return classesname;
 		}
 

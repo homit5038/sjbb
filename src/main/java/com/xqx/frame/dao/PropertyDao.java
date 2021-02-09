@@ -2,6 +2,7 @@ package com.xqx.frame.dao;
 
 import java.util.List;
 
+import com.xqx.frame.model.TKindergarten;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,7 +22,12 @@ public interface PropertyDao extends JpaRepository<TProperty,Long> {
 	
 	@Query("from TProperty p where p.fId = :fid order by p.fSort ASC")
 	public List<TProperty> getByFid(@Param("fid")Long fid);
-	
+
+
+	@Query("from TProperty where id = ?1")
+	//@Query(value = "select childName from TChildren f where f.id = ?' ", nativeQuery = true)
+	public TProperty findByTPropertyById(Long id);
+
 	@Query("from TProperty p where p.fId = :fid and p.id not in:ids order by p.fSort ASC")
 	public List<TProperty> getByFidAndIdNotIn(@Param("fid")Long fid,@Param("ids")List<Long> ids);
 	

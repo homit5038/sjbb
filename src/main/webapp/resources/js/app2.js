@@ -176,6 +176,125 @@ $(document).on('click', '#charge-item-table tr:not(:first)', function () {
 
 
 
+
+
+ //补打小票
+    $(document).on('click', '.printbill', function () {
+
+        var flowCode = $(this).attr("name");
+        var cid = $(this).attr("cid");
+
+        //查询历史总共信息
+ 
+        jQuery.ajax({
+          //url: $("#path").val() + '/charge/findHistoryByCid.do',
+            url: 'findHistoryprints',
+            data: 'cid=' + cid,
+            method: 'post',
+            async: false,
+            dataType: 'json',
+            success: function (data) {
+                //总共实收应收
+            	
+            	
+            	$("#kidNameb").html(data["children"]);
+            	$("#kidNumb").html(data["childSchoolId"]);
+                $("#kidTotalMoneyb").html(data["chargerealpay"]);
+                $("#kidRealMoneyb").html(data["chargeshouldpay"]);
+                $("#classe").html(data["chargeshouldpay"]);
+                $("#kidFlowCodeb").html(data["flowCode"]);
+                $("#kidClassb").html(data["classe"]);
+                if (printBillType == 1) {
+                    $("#kidRealMoneyUppercaseb").html(digit_uppercase(data.payed));
+                }
+                if (data.favourable == '1') {
+                    $("#kidShouldMoneyb").html(data[3]);
+                } else if (data.favourable == '0') {
+                    $("#kidShouldMoneyb").html(data[4]);
+                }
+                var paytype =  '';
+                if(data["paytype"]=="CASH"){
+                    paytype="现金";
+                }
+                if(data["paytype"]=="CARD"){
+                    paytype="刷卡";
+                }
+                if(data["paytype"]=="WET"){
+                    paytype="微信"
+                }
+                if(data["paytype"]=="PAY"){
+                    paytype="支付宝";
+                }
+                $("#kidPaytypeb").html(paytype);
+                $("#kidUsernameb").html(data["children"]);
+                $("#kidAttendb").html(data.attendDays+"天");
+                $("#kidBzb").html(data["bzhu"]);
+                $("#kidTimeb").html(getTime());
+                if (data["payableDsate"] != null) {
+                    var paydate = data["payableDsate"].substr(0, data["payableDsate"].lastIndexOf('-'));
+                    $("#kidPayableDate").html(paydate + "（补打小票）");
+                }
+                else {
+                    var date = new Date(data["payableDsate"]);
+                    var payDate = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate();
+                    $("#kidPayableDate").html(payDate + "（补打小票）");
+                }
+            }
+        });
+        //查询详细信息
+    /*    jQuery.ajax({
+            url: $("#path").val() + '/charge/findChargeInfoDetail.do',
+            data: 'flowCode=' + flowCode,
+            method: 'post',
+            async: false,
+            dataType: 'json',
+            success: function (data) {
+                $(".othertrb").remove();
+                if (printBillType == 1) {
+                    var printCount = 0;
+                    var tr = '<tr class="othertrb">';
+                }
+                for (var i in  data) {
+                    if (printBillType == 0) {
+                        var tr = $('<tr class="othertrb"></tr>');
+                        var cName = $('<td>' + data[i].chargingItemName + '</td>');
+                        var cAmount = $('<td>' + data[i].chargingAmount + '元</td>');
+                        tr.append(cName, cAmount);
+                        $("#printtableb").append(tr);
+                    }
+                    else if (printBillType == 1) {
+                        tr += "<td>" + data[i].chargingItemName + "：" + data[i].chargingAmount + '</td>';
+                        if (printCount % 2 == 1) {
+                            tr += '</tr><tr class="othertrb">';
+                        }
+                        printCount++;
+                    }
+                }
+                if (printBillType == 1) {
+                    tr += "</tr>";
+                    $("#printtableb").append($(tr));
+                }
+                $("#kidFlowCodeb").html(flowCode);
+                //时间
+                var time = getTime();
+                $("#kidTimeb").html(time);
+
+            }
+        });*/
+        printCount();
+        printTicket($("#printerName").val(), "#wrapb", $("#printerWidth").val());
+    });
+
+
+
+
+
+
+
+
+
+
+
  //删除历史缴费
     $(document).on('click', '.delhistory', function (e) {
         e.preventDefault();

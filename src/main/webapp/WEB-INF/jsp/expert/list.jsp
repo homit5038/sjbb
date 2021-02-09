@@ -59,7 +59,7 @@
 	<pre>专家库>专家名单</pre>
 	<div class="panel panel-info" style="width: 99%">
 		<div class="panel-heading">
-			<form id="expertForm" action="${ctx}/expert/list" method="post">
+			<form id="expertForm" class="form-inline row" action="${ctx}/expert/list" method="post">
 				<input type="hidden" id="size" name="size" value="${size}"> 
 			    <input type="hidden" id="page" name="page" value="${page}">
 				<table>

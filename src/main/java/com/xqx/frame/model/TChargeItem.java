@@ -1,13 +1,10 @@
 package com.xqx.frame.model;
 
-import java.io.Serializable;
+
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
 
@@ -22,8 +19,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @Description 收费项
  */
 @Entity
-public class TChargeItem extends BaseEntity implements Serializable {
-
+public class TChargeItem extends BaseAuditEntity {
 	/**
 	 * 
 	 */
@@ -81,11 +77,12 @@ public class TChargeItem extends BaseEntity implements Serializable {
 	public void setPeriodic(Periodic periodic) {
 		Periodic = periodic;
 	}
-	
-	
+	public String tsting() {
+		return this.ItemName+":"+Amount;
+	}
 	@Override
 	public String toString() {
-		return "ItemName:"+Amount+" ";
+		return this.ItemName+":"+Amount;
 	}
 
 

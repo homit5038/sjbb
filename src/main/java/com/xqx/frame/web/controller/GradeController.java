@@ -57,7 +57,7 @@ public class GradeController {
 	private FileService fileService;
 	
 	/**
-	 * 初始化新增专家
+	 * 初始化
 	 * @param m
 	 * @return
 	 */

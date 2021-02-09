@@ -7,6 +7,8 @@
 <html>
 <head>
 <jsp:include page="/WEB-INF/jsp/public/header.jsp"></jsp:include>
+<link href="${ctx}/resources/zui/lib/datetimepicker/datetimepicker.min.css" rel="stylesheet">
+<script src="${ctx}/resources/zui/lib/datetimepicker/datetimepicker.min.js"></script>
 <style type="text/css">
 
 </style>
@@ -34,6 +36,22 @@
 	    $( "#pgjg" ).autocomplete({
 	      source: availableTags
 	    });
+	
+	
+		$(".form-date").datetimepicker(
+				{
+				    language:  "zh-CN",
+				    weekStart: 1,
+				    todayBtn:  1,
+				    autoclose: 1,
+				    todayHighlight: 1,
+				    startView: 2,
+				    minView: 2,
+				    forceParse: 0,
+				    format: "yyyy-mm-dd"
+				});
+	
+	
 	});
     
 	function ismail(str){
@@ -69,7 +87,6 @@
 	
 	<form:form modelAttribute="employe" id="employeForm" method="post" enctype="multipart/form-data">
 
-	
 		<div class="panel panel-info" style="width: 99%">
 			<div class="panel-body">
 				<table class="table table-condensed">
@@ -186,8 +203,8 @@
 					</tr>	
 				<tr height="40px">
 					<td width="220px" align="right"><span class="err">*</span> 毕业时间:
-					<td width="320px"><form:input path="beginToWorkDate"  onclick="SelectDate(this,'yyyy-MM-dd')" id="beginToWorkDate"
-								cssClass="form-control" readonly="true" style="width:320px" /></td>
+					<td width="320px"><form:input path="beginToWorkDate"   id="beginToWorkDate"
+								cssClass="form-control form-date" readonly="true" style="width:320px" /></td>
 					</tr>	
 				<tr height="40px">
 					<td width="220px" align="right"><span class="err">*</span>考勤卡号:
@@ -199,19 +216,14 @@
 					<td width="320px">
 					
 					
-					<form:input path="inGartenDate" onclick="SelectDate(this,'yyyy-MM-dd')" id="inGartenDate"
-								cssClass="form-control" readonly="true" style="width:320px" />
-
-								
-								
-								
-								
+					<form:input path="inGartenDate" id="inGartenDate"
+								cssClass="form-control form-date" readonly="true" style="width:320px" />
 								</td>
 					</tr>
 				<tr height="40px">
 					<td width="220px" align="right"><span class="err">*</span>生日:
-					<td width="320px"><form:input path="birthday" onclick="SelectDate(this,'yyyy-MM-dd')" id="birthday"
-								cssClass="form-control"  readonly="true" style="width:320px" /></td>
+					<td width="320px"><form:input path="birthday"  id="birthday"
+								cssClass="form-control form-date"  readonly="true" style="width:320px" /></td>
 					</tr>
 				<tr height="40px">
 					<td width="220px" align="right"><span class="err">*</span>邮箱:

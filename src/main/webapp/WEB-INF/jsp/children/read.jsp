@@ -92,8 +92,35 @@
 				 	<th>备注</th>
 					<td colspan="5"  class="txiv">${children.remarks}</td>
 				</tr>
-              </tbody></table>
-
+				
+			 <tr>
+				 	<th>学号</th>
+				    <td colspan="5"  class="txiv">${children.childSchoolId}</td>
+				</tr>
+				<tr>
+				 	<th colspan="6">备注</th>
+				
+				</tr>
+			<tr>
+				 	<th colspan="6" style="text-align: center;">关联收费项</th>
+				
+				</tr>
+				<tr>
+				<th colspan="2">收费名称</th>
+			    <th colspan="2">金额</th>
+			    <th colspan="2">收费周期</th>
+		
+				</tr>
+				<c:forEach items="${chargeitem}" var="chargeitem">
+				<tr>
+				<td colspan="2"  class="txiv">${chargeitem.itemName}</td>
+				<td colspan="2"  class="txiv">${chargeitem.amount}</td>
+				<td colspan="2"  class="txiv">${chargeitem.periodic.displayName}</td>
+				</tr>
+				</c:forEach>
+				
+              </tbody>
+              </table>
 
 	
 		</div>

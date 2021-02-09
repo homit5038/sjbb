@@ -172,10 +172,10 @@
                 </div>
             
             <h1 class="kindergarden-name">
-                    育英三幼
+                   智成教育幼儿园
             </h1>
             
-                <h3>电话：123456789</h3>
+            
             
             <table class="total-list">
                 <tr>
@@ -265,7 +265,7 @@
 	
 	
 	
-	
+
 	
 	<div class="panel panel-info" style="width: 99%">
 		<div class="panel-heading">
@@ -333,7 +333,7 @@
 				</c:choose>
 			</table>
 			</div>
-	
+
 <div class="col-md-12 charge-detail"></div>	
 <form id="myform" class="form-inline">
 <div class="row">
@@ -360,7 +360,7 @@
                     <input type="hidden" name="chargetype" id="chargingType" value="1">
                     <input type="hidden" name="childId" id="childId">
                 
-                    <input type="text" name="chargConnection" id="chargConnection" value="0">
+                    <input type="text" name="chargConnection" class="form-control charge-input"  readonly="" id="chargConnection" value="0">
                     
 			
 			
@@ -435,8 +435,8 @@
 	<jsp:include page="/WEB-INF/jsp/public/modal.jsp"></jsp:include>
 </body>
 </html>
-<script type="text/javascript" charset="utf-8" src="https://www.jqiyun.cn/theme/plugins/zui/js/zui.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="https://www.jqiyun.cn/theme/js/app.js"></script>
+<script type="text/javascript" charset="utf-8" src="${ctx}/resources/zui/js/zui.min.js"></script>
+<script src="${ctx}/resources/zui/lib/datatable/zui.datatable.min.js"></script><script type="text/javascript" charset="utf-8" src="${ctx}/resources/js/base.js"></script>
 <script type="text/javascript" charset="utf-8" src="${ctx}/resources/js/LodopFuncs.js"></script>
 <script type="text/javascript" charset="utf-8" src="${ctx}/resources/js/print.js"></script>
 <script type="text/javascript" charset="utf-8" src="${ctx}/resources/js/app2.js"></script>

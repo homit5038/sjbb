@@ -3,6 +3,7 @@ package com.xqx.frame.service;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,7 +27,14 @@ public interface EmployeService {
 	 * @return
 	 */
 	public TEmploye findEmployeById(long id);
-	
+
+
+
+	/**
+	 * 根据id查找专家
+	 * @return
+	 */
+	public JSONObject findEmployeByIds(long id);
 	/**
 	 * 根据姓名查找专家
 	 * @param Name

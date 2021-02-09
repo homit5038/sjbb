@@ -1,17 +1,12 @@
 package com.xqx.frame.model;
 
-import java.util.Date;
-import javax.persistence.Entity;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import javax.validation.constraints.Size;
-
+import com.xqx.frame.security.SecurityUtil;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
-import com.xqx.frame.security.SecurityUtil;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
+import java.util.Date;
 /**
  * 
  * 
@@ -39,7 +34,13 @@ public class TEmploye extends BaseAuditEntity {
 	@Size(max = 50)
 	private String employeEmail;
 	
-	
+	/**
+	 * 所在幼儿园
+	 */
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "kindergartenId",referencedColumnName="id")
+	private TKindergarten kindergarten; 
+    
 	/**
 	 * 工号码
 	 */
@@ -293,6 +294,15 @@ public class TEmploye extends BaseAuditEntity {
 		this.sexType = sexType;
 	}
 	
+
+	public TKindergarten getKindergarten() {
+		return kindergarten;
+	}
+
+	public void setKindergarten(TKindergarten kindergarten) {
+		this.kindergarten = kindergarten;
+	}
+
 	@PrePersist
 	public void createAuditInfo() {
 		audit(true);

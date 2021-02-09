@@ -10,7 +10,11 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpServletRequest;
 
+import com.alibaba.fastjson.JSONObject;
+import com.xqx.frame.dao.PropertyDao;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,9 +32,12 @@ import com.xqx.frame.model.SystemLog;
 import com.xqx.frame.model.TClasses;
 import com.xqx.frame.model.TEmploye;
 import com.xqx.frame.model.TExpert;
+import com.xqx.frame.model.TKindergarten;
 import com.xqx.frame.model.TUser;
 import com.xqx.frame.model.query.employeQuery;
 import com.xqx.frame.security.SecurityUtil;
+import sun.security.ssl.SSLEngineImpl;
+
 @Service
 public class EmployeServiceImpl implements EmployeService {
 
@@ -39,11 +46,14 @@ public class EmployeServiceImpl implements EmployeService {
 	TEmployeDao employeDao;
 	@Autowired
 	FileService fileservice;
+	@Autowired
+	PropertyDao propertyDao;
 	@Override
 	public String saveEmploye(TEmploye employe) throws ParameterCheckException{
 		if (employe != null) {
 			// 新建的专家
-			
+
+			//Object topId=request.getSession().getAttribute("topId");
 			
 		
 			if (employe.getId() == null) {
@@ -61,6 +71,14 @@ public class EmployeServiceImpl implements EmployeService {
 				//TEmploye EmpExist = employeDao.findOne(employe.getId());
 
 				//employe.setClassName(EmpExist.getClassName());
+				//System.out.print(employe.getId()+"////===============");
+				TEmploye employed =employeDao.findOne(employe.getId());
+				
+				if(employed!= null) {
+					BeanUtils.copyProperties(employed, employe);	
+				}
+				
+				
 				SexType.values();
 				employeDao.save(employe);
 			}
@@ -77,6 +95,16 @@ public class EmployeServiceImpl implements EmployeService {
 	public TEmploye findEmployeById(long id) {
 		return employeDao.findOne(id);
 	}
+
+	@Override
+	public JSONObject findEmployeByIds(long id) {
+		JSONObject jsonObj = new JSONObject();
+		TEmploye employe=employeDao.findOne(id);
+		jsonObj.put("employe",employe);
+		jsonObj.put("sexType",propertyDao.findOne(Long.valueOf(employe.getSexType())).getfValue());
+		return  jsonObj;
+	}
+
 
 	@Override
 	public List<TEmploye> findEmployeByName(String name) {

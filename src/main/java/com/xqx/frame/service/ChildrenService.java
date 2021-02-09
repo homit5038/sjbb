@@ -1,5 +1,6 @@
 package com.xqx.frame.service;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +9,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.xqx.frame.exception.ParameterCheckException;
+import com.xqx.frame.form.ChildrenQueryVO;
 import com.xqx.frame.model.TChildren;
+import com.xqx.frame.model.query.childrenQuery;
+
+
 
 
 public interface ChildrenService {
@@ -18,7 +23,7 @@ public interface ChildrenService {
 	 * @throws ParameterCheckException 
 	 */
 	public String saveChildren(TChildren children) throws ParameterCheckException;
-	
+	public ChildrenQueryVO findChildrensById(long id);;
 	/**
 	 * 根据id查找专家
 	 * @return
@@ -31,12 +36,21 @@ public interface ChildrenService {
 	 * @return
 	 */
 	public List<TChildren> findChildrenByName(String name);
+	public List<TChildren> findBychildrennamejson(String name); 
+
+	/**
+	 * 学生生日信息查询
+	 * @return
+	 */
+	public Page<TChildren> findAll(final String gid,Pageable pageable);
+	
+	Page<TChildren> findAllt(childrenQuery queryVo, Integer page, Integer size);
 	
 /*	
 	Page<TChildren> findAllt(childrenQuery queryVo, Integer page, Integer size);
 	*/
 	/**
-	 * 查找所有专家信息
+	 * 查找学生信息
 	 * @return
 	 */
 	public Page<TChildren> findAll(final String name,final String cid, final String gid,Pageable pageable);
@@ -51,8 +65,13 @@ public interface ChildrenService {
 	 * 删除专家
 	 * @param id
 	 */
-	public void deleteChildren(long id);
+	public boolean deleteChildren(long id);
 	
+	public String getSystemSequence(String name);
+	
+	List<Map<String, Object>> Childrenstatistics();
+
+	ByteArrayOutputStream exportPersonnelsExcel(List<Map<String, Object>> practitioners) throws Exception;
 
 	/**
 	 * 外部excel导入专家信息
@@ -61,5 +80,7 @@ public interface ChildrenService {
 	 * @throws Exception
 	 */
 	public Map<String, Object> impData(MultipartFile multipartFile)
-			throws Exception; 
+			throws Exception;
+
+
 }

@@ -1,22 +1,26 @@
 package com.xqx.frame.dao;
 
+import com.xqx.frame.model.TUserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.xqx.frame.model.TUserRole;
+import java.util.List;
 
 @Repository
 public interface TUserRoleDao extends JpaRepository<TUserRole, Long> {
 	@Query("from TUserRole ur where ur.user.id = :uid")
 	public TUserRole findByUserId(@Param("uid") long uid);
-	
+
+	@Query("from TUserRole ur where ur.user.id = ?1")
+	List<TUserRole> selectByUserId(Long id);
+
 	@Modifying
 	@Query("delete from TUserRole ur where ur.user.id = :uid")
 	public void deleteByUserId(@Param("uid") long uid);
-	
+
 	@Modifying
 	@Query("delete from TUserRole ur where ur.id = :id")
 	public void deleteUserRole(@Param("id") long id);

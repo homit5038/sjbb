@@ -30,6 +30,12 @@ public interface ClassesService {
 	 */
 	public List<TClasses> findClassesByClassesName(String name);
 	
+	
+	
+	public List<TClasses> findClassesByGradeid(long id);
+	
+	
+	
 	/**
 	 * 查找所有专家信息
 	 * @return

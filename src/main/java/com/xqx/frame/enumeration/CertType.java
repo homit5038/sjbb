@@ -64,7 +64,7 @@ public enum CertType implements ConvertedEnum<Integer> {
     public static final ConvertedEnumResolver<CertType, Integer> resolver = new ConvertedEnumResolver<>(CertType.class);
 
     public static CertType fromDbValue(Integer dbValue) {
-        if (ObjectUtils.isEmpty(dbValue)) {
+        if (ObjectUtils.isEmpty(new Integer[]{dbValue})) {
             return null;
         }
         return resolver.get(dbValue);

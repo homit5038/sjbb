@@ -7,7 +7,23 @@
 <html>
 <head>
 <jsp:include page="/WEB-INF/jsp/public/header.jsp"></jsp:include>
+<link href="${ctx}/resources/zui/lib/datetimepicker/datetimepicker.min.css" rel="stylesheet">
+<script src="${ctx}/resources/zui/lib/datetimepicker/datetimepicker.min.js"></script>
 <script type="text/javascript">
+$(function(){ 
+	$(".form-date").datetimepicker(
+			{
+			    language:  "zh-CN",
+			    weekStart: 1,
+			    todayBtn:  1,
+			    autoclose: 1,
+			    todayHighlight: 1,
+			    startView: 2,
+			    minView: 2,
+			    forceParse: 0,
+			    format: "yyyy-mm-dd"
+			});
+})
 
 	function submitForm() {
 		jQuery('#main').showLoading();
@@ -69,7 +85,7 @@
 					<tr height="40px">
 						<td align="right" width="100px">姓名：</td>
 						<td align="left"><input type="text" name="employeName" value="${name}"
-							style="width: 180px" class="form-control" placeholder="请输入专家姓名"></td>
+							style="width: 180px" class="form-control" placeholder="请输入姓名"></td>
 						
 						
 					
@@ -77,11 +93,11 @@
 						<td align="right" width="100px">进园时间：</td>
 						<td align="left"><input type="text" name="beginTime"
 							id="beginTime" value="${beginTime}" style="width: 122px"
-							onclick="SelectDate(this,'yyyy-MM-dd')" readonly="readonly"
-							class="form-control">-<input type="text" name="endTime" 
+							 readonly="readonly"
+							class="form-control form-date">-<input type="text" name="endTime" 
 							id="endTime" value="${endTime}" style="width: 122px"
-							onclick="SelectDate(this,'yyyy-MM-dd')" readonly="readonly"
-							class="form-control"></td>
+						 readonly="readonly"
+							class="form-control form-date"></td>
 						<td align="left">
 							<button class="btn btn-primary" type="button" id="submitBtn" onclick="submitForm()">查询</button>
 							<button class="btn btn-primary" type="button" id="newadd" onclick="addem()">新增</button>

@@ -80,7 +80,7 @@
 							<input type="button" onclick="rese()"value="清空" class="btn btn-default">
 						
 						    <input type="button" onclick="addem()"	value="添加班级" class="btn btn-default">
-							<button type="button" onclick="startConnect();" class="btn btn-warning" >覆盖关联</but
+							<button type="button" onclick="startConnect();" class="btn btn-warning" >覆盖关联</button>
 						</td>
 					</tr>
 				</table>
@@ -101,9 +101,9 @@
 						<thead>
 							<tr>
 								<th width="100px">操&nbsp;&nbsp;&nbsp;作</th>
-								<th>年级</th>
-					            <th>班级</th>
-	                             <th>人数</th>
+								<th>班级</th>
+					            <th>所属年级</th>
+	                             <th>班级人数</th>
 							</tr>
 						</thead>
 						<c:forEach items="${data.content }" var="data">
@@ -161,10 +161,9 @@
 	<jsp:include page="/WEB-INF/jsp/public/modal.jsp"></jsp:include>
 </body>
 </html>
-<script type="text/javascript" src="https://www.jqiyun.cn/theme/plugins/zui/js/zui.min.js"></script>
-<script type="text/javascript" src="https://www.jqiyun.cn/theme/js/app.js"></script>
+<script type="text/javascript" charset="utf-8" src="${ctx}/resources/zui/js/zui.mine.js"></script>
+<script type="text/javascript" charset="utf-8" src="${ctx}/resources/js/appo.js"></script>
 <script type="text/javascript">
-
 	$("#kinder-list-table").datatable({
 		checkable : true,
 		storage:false,

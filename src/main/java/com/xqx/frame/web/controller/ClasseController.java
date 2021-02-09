@@ -1,45 +1,35 @@
 package com.xqx.frame.web.controller;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.poi.ss.formula.functions.T;
+import com.xqx.frame.dao.TClasseDao;
+import com.xqx.frame.dao.TchargeItemDao;
+import com.xqx.frame.exception.ParameterCheckException;
+import com.xqx.frame.form.PageQueryResult;
+import com.xqx.frame.model.TChargeItem;
+import com.xqx.frame.model.TClasses;
+import com.xqx.frame.model.TGrade;
+import com.xqx.frame.service.ClassesService;
+import com.xqx.frame.service.GradeService;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 
-import com.xqx.frame.dao.TClasseDao;
-import com.xqx.frame.dao.TchargeItemDao;
-import com.xqx.frame.exception.ParameterCheckException;
-import com.xqx.frame.model.TChargeItem;
-import com.xqx.frame.model.TClasses;
-import com.xqx.frame.model.TExpert;
-import com.xqx.frame.model.TGrade;
-import com.xqx.frame.service.ChargeItemService;
-import com.xqx.frame.service.ClassesService;
-import com.xqx.frame.service.GradeService;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLEncoder;
+import java.util.*;
 
 /*@RunWith(SpringJUnit4ClassRunner.class)  
 @ContextConfiguration(locations={"classpath*:/spring/root-context.xml"})*/
@@ -74,7 +64,42 @@ public class ClasseController {
 		m.addAttribute("msg", "new");
 		return "/classe/createOrUpdate";
 	}
+	/**
+	 * 根据年级获取对应班级
+	 * @param m
+	 * @return
+	 */
+	
+	@ResponseBody
+	@RequestMapping(value = "/queryclassbygradeid",method=RequestMethod.POST)
+	public Object findClassesByGradeid(Model m,HttpServletRequest request) throws Exception{
+		String gradeId = request.getParameter("gradeId");
+		String fid = request.getParameter("fid");
+		//List<TEmploye> list = employeDao.findAll();
+		JSONObject jsonObj = new JSONObject();
+		
+		List<TClasses> classes=classesService.findClassesByGradeid(Long.valueOf(gradeId));
+	
+		return new PageQueryResult<>(classes);
+	 }
 
+
+	@ResponseBody
+	@RequestMapping(value ="/child",method=RequestMethod.POST)
+	public Object childBirthDay(Model m,
+								//SessionStatus sessionStatus,
+								@PageableDefault(page = 0, size = 10,direction = Sort.Direction.DESC) Pageable p,
+								SessionStatus status,
+								HttpServletRequest request)
+			throws ParameterCheckException {
+
+		String gid = request.getParameter("selectDate");
+
+		return new PageQueryResult<>("222222");
+	}
+
+
+	
 	/**
 	 * 新增专家
 	 * @param m
@@ -167,7 +192,7 @@ public class ClasseController {
 	 * @throws ParameterCheckException 
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/{id}/del")
+	@RequestMapping("/{id}/del")
 	public String deleteTClasses(@PathVariable Long id, Model m) throws ParameterCheckException {
 		classesService.deleteClasses(id);
 		return "ok";

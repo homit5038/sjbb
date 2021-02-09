@@ -1,19 +1,12 @@
 package com.xqx.frame.model;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.validation.constraints.Size;
-
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-import org.hibernate.validator.constraints.NotEmpty;
 
 
 /**
@@ -40,9 +33,10 @@ public class TClasses extends BaseEntity implements Serializable {
 	@Size(max = 50)
 	private String classesname;
  
-	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "classe", cascade = CascadeType.ALL)
-	@NotFound(action = NotFoundAction.IGNORE)
+	@JsonIgnore
+/*	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)*/
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "classe")
+	//@NotFound(action = NotFoundAction.IGNORE)
 	private List<TChildren> children;
 	
 	private String  chargeitem;
@@ -87,6 +81,10 @@ public class TClasses extends BaseEntity implements Serializable {
 	
 	public void setGrade(TGrade grade) {
 		this.grade = grade;
+	}
+	@Override
+	public String toString() {
+		return this.getId().toString();
 	}
 
 	

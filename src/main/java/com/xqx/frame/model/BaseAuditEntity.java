@@ -3,6 +3,7 @@ package com.xqx.frame.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -79,7 +80,7 @@ public class BaseAuditEntity extends BaseEntity implements Serializable {
 		Date now = new Date();
 		if (isCreate) {
 			this.createTime = now;
-			this.createUserID = u.getId();
+			//this.createUserID = u.getId();
 			this.creatorIp = u.getLoginIpAddress();
 		}
 
@@ -105,7 +106,7 @@ public class BaseAuditEntity extends BaseEntity implements Serializable {
 	public void setCreatorIp(String creatorIp) {
 		this.creatorIp = creatorIp;
 	}
-
+	@Column(updatable=false)
 	public Long getCreateUserID() {
 		return createUserID;
 	}

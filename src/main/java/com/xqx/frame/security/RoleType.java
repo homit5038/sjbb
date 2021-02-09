@@ -1,9 +1,18 @@
 package com.xqx.frame.security;
-
 public enum RoleType {
+
+
 	ROLE_ADMIN("ROLE_ADMIN","系统管理员","管理及分配所有用户及权限"),
-	ROLE_EXPERT("ROLE_EXPERT","专家管理员","维护专家信息"),
-	ROLE_SALES("ROLE_SALES","业务员","抽取专家");
+	ROLE_EXPERT("ROLE_EXPERT","专家管理员","管理管理员"),
+	ROLE_BOSS("ROLE_BOSS","法人","法人"),
+	ROLE_PRINCIPAL("ROLE_PRINCIPAL","园长","园长"),
+	ROLE_CHARGE("ROLE_CHARGE","收费管理","收费管理"),
+	ROLE_SALES("ROLE_SALES","业务员","业务员管理"),
+	ROLE_CHILD("ROLE_CHILD","幼儿管理","幼儿管理"),
+	ROLE_FINANCIAL("ROLE_FINANCIAL","财务管理","财务管理"),
+	ROLE_STOCK("ROLE_STOCK","库存管理","库存管理"),
+	ROLE_DELETE("ROLE_DELETE","删除收费记录","删除收费记录"),
+	ROLE_WORKER("ROLE_WORKER","职工管理","职工管理");
 
 	private String name;
 	private String displayName;

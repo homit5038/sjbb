@@ -1,14 +1,8 @@
 package com.xqx.frame.service;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
+import com.xqx.frame.dao.TClasseDao;
+import com.xqx.frame.exception.ParameterCheckException;
+import com.xqx.frame.model.TClasses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,11 +10,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.xqx.frame.dao.TClasseDao;
-import com.xqx.frame.exception.ParameterCheckException;
-import com.xqx.frame.model.TChildren;
-import com.xqx.frame.model.TClasses;
-import com.xqx.frame.model.TGrade;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
 @Service
 public class ClassesServiceImpl implements ClassesService {
 	
@@ -48,7 +43,10 @@ public class ClassesServiceImpl implements ClassesService {
 	public List<TClasses> findClassesByClassesName(String name) {
 		return classesDao.findByclassesname(name);
 	}
-
+	@Override
+	public List<TClasses> findClassesByGradeid(long id) {
+		return classesDao.findByclassesByGradeid(id);
+	}
 	@Override
 	public Page<TClasses> findAll(final String name, Pageable pageable) {
 
@@ -77,11 +75,12 @@ public class ClassesServiceImpl implements ClassesService {
 		return classes;
 	}
 
-	@Override
+	   @org.springframework.transaction.annotation.Transactional
+	   @Override
 	public void deleteClasses(long id) {
-		TClasses classes = classesDao.findOne(id);
+		//TClasses classes = classesDao.findOne(id);
 		
-		classesDao.delete(classes);
+		classesDao.deleteByClasses(id);
 
 	}
 

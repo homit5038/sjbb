@@ -14,54 +14,7 @@
 <script type="text/javascript">
 $(function(){
 	
-	 var table = $("#charge-item-table").DataTable(
-			 {
-				 
-				 "ajax": "${ctx}/property/lists",
-				    "columns": [
-			            { "data": "fName" },
-			            { "data": "fValue" },
-			            { "data": "fId" },
-			            { "data": "id" }
-			        ],
-			        "iDisplayLength":10,//初始默认10条
-			        "oLanguage":
-			        {
-			           "sProcessing": "正在加载中......",
-			             "sLengthMenu": "每页显示 _MENU_ 条记录",
-			             "sZeroRecords": "对不起，查询不到相关数据！",
-			              "sEmptyTable": "表中无数据存在！",
-			            "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录",
-			            "sInfoFiltered": "数据表中共为 _MAX_ 条记录",
-			            "sSearch": "搜索",
-			             "oPaginate": {
-			                "sFirst": "首页",
-			                 "sPrevious": "上一页",
-			                 "sNext": "下一页",
-			                "sLast": "末页"
-			        }
-			       
-			        
-			        
-			        }
-			 }
-	 );
-	 
-	 $("#charge-item-table tbody").on( 'click', 'tr', function () {
-	
-	        if ( $(this).hasClass('selected') ) {
-	            $(this).removeClass('selected');
-	        }
-	        else {
-	            table.$('tr.selected').removeClass('selected');
-	            $(this).addClass('selected');
-	        }
-	    } );
-	 
-	    $('#button').click( function () {
-	        table.row('.selected').remove().draw( false );
-	    });
-	
+
 });
 /* 	$(".charge-item-table").datatable({
 	    checkable:true,
@@ -188,19 +141,7 @@ $(function(){
 	
 	
 		
-<table class="table table-condensed charge-item-table" id="charge-item-table" >
-                                    	
-                                        <thead>
-											<tr>
-												<th scope="col">收费编码</th>
-												<th scope="col">收费项目名称</th>
-												<th scope="col">金额</th>
-												<th scope="col">收费周期</th>
-												<!-- <th scope="col">备注</th> -->
-											</tr>
-										</thead>
-										
-                                    </table>
+
 		
 		
 	
@@ -234,9 +175,9 @@ $(function(){
 			    <input type="hidden" id="page" name="page" value="${page}">
 				<table>
 					<tr height="40px">
-						<td align="right" width="100px">姓名：</td>
+						<td align="right" width="100px">年级查询：</td>
 						<td align="left"><input type="text" name="gradeName" value="${name}"
-							style="width: 180px" class="form-control" placeholder="请输入专家姓名"></td>
+							style="width: 180px" class="form-control" placeholder="班级"></td>
 				
 						
 						

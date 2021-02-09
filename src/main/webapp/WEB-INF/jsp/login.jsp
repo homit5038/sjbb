@@ -81,7 +81,7 @@ src="${ctx}/resources/js/jquery-1.12.1.min.js"></script>
 <div class="container" style="margin-top: 20px;width:1122px">
     <div class="row">
         <div class="col-md-12">
-            
+
         </div>
     </div>
     <div class="row" style="margin-top: 20px;">
@@ -92,18 +92,18 @@ src="${ctx}/resources/js/jquery-1.12.1.min.js"></script>
                     <li style="background:url(${ctx}/resources/images/banner1.png) 50% 0 no-repeat;"></li>
                     <li style="background:url(${ctx}/resources/images/banner2.png) 50% 0 no-repeat;"></li>
                     <li style="background:url(${ctx}/resources/images/banner3.png) 50% 0 no-repeat;"></li>
-                    <li style="background:url(${ctx}/resources/images/banner4.png) 50% 0 no-repeat;"></li> 
-                   
+                    <li style="background:url(${ctx}/resources/images/banner4.png) 50% 0 no-repeat;"></li>
+
                 </ul>
             </div>
         </div>
         <div class="col-md-4">
             <div class="panel panel-default" >
-   
+
                 <div class="panel-body" style="padding: 40px 20px;">
                     <form action="j_spring_security_check" id="loginForm" method="post" >
                         <h4 class="login-title">登录</h4>
-                       
+
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon large"><span class="glyphicon glyphicon-user"></span></div>
@@ -114,7 +114,7 @@ src="${ctx}/resources/js/jquery-1.12.1.min.js"></script>
                             <div class="input-group">
                                 <div class="input-group-addon large"><span class="glyphicon glyphicon-lock"></span></div>
                                 <input type="password" id="j_password" name="j_password" placeholder="输入密码" id="exampleInputPassword2" class="form-control large">
-                            
+
                             </div>
                         </div>
                         <div class="form-group">
@@ -125,13 +125,13 @@ src="${ctx}/resources/js/jquery-1.12.1.min.js"></script>
 									id="randImage" src="${ctx}/image.jsp" width="70" height="50"
 									border="1" align="middle" onclick="javascript:loadimage();"
 									style="cursor: pointer;" />
-                            
+
                             </div>
                         </div>
-                        
+
                         <div class="checkbox" style="text-align: right;">
 	                       	<span style="color:red" id="error"><b>	${SPRING_SECURITY_LAST_EXCEPTION.message}</b></span>
-                        
+
                         </div>
                         <input type="hidden" name="referer" value="http://manage.linktrust-edu.com/linktrust/sys/site/spacetologin" />
                         <button class="btn btn-danger btn-lg" type="submit" style="width:100%;">登 陆</button>
@@ -141,6 +141,7 @@ src="${ctx}/resources/js/jquery-1.12.1.min.js"></script>
         </div>
     </div>
 </div>
+
 <div class="container footer" style=" margin:auto; border-top:1px solid #DDD; padding-top:20px; box-shadow:0px -1px 0px #fff;">
     <div class="row">
         <div class="col-md-12">Copyright @ 2017-2020 昆明新奇星科技有限公司</div>
@@ -148,12 +149,12 @@ src="${ctx}/resources/js/jquery-1.12.1.min.js"></script>
 </div>
 
 <style type="text/css">
-	
+
 	.flex-direction-nav {
 	display:none;
 	}
 </style>
- 
+
 
 
 <!-- 2014“暑假班”JS公用库 -->

@@ -1,8 +1,13 @@
 package com.xqx.frame.service;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.xqx.frame.config.Config;
 import com.xqx.frame.dao.TGradeDao;
-import com.xqx.frame.model.TGrade;
+
 
 
 
@@ -58,16 +63,43 @@ public class FileServiceImpl implements FileService {
 	 */
 	public String saveFile(MultipartFile multipartFile, String uploadDir) throws IOException{
 		String baseDir = Config.getString("uploadFileDir");
-		File upDir = null;
-	//	baseDir += uploadDir ;
-		upDir = new File(uploadDir);
-		if (!upDir.exists()) {
-			upDir.mkdirs();
-		}
-		File file = new File(upDir.getPath(), multipartFile.getOriginalFilename());
-		FileUtils.copyInputStreamToFile(multipartFile.getInputStream(),
-					file);
-		return file.getPath();
+		//File upDir = null;
+		//	baseDir += uploadDir ;
+		if (!multipartFile.isEmpty()) {
+			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMM");
+			String subfolder = sdf1.format(new Date());
+		
+			File upDir = new File(baseDir);
+			if (!upDir.exists()) {
+				upDir.mkdirs();
+			}
+			File fileDir = new File(baseDir + "/" + subfolder);
+			if (!fileDir.exists()) {
+				fileDir.mkdirs();
+			}
+
+					String fileName = multipartFile.getOriginalFilename();
+					SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMddhhmmss");
+					String uuid = sdf2.format(new Date());
+					String Type = fileName.substring(fileName.lastIndexOf("."));
+					String picName = "";
+					File file = null;
+					BufferedImage bi = ImageIO.read(multipartFile.getInputStream());
+					if (bi != null) {
+						picName = uuid + 0  + Type;
+						file = new File(fileDir.getPath(), picName);
+					} else {
+						picName = fileName;
+						file = new File(fileDir.getPath(), picName);
+					}
+					
+					FileUtils.copyInputStreamToFile(multipartFile.getInputStream(),	file);	FileUtils.copyInputStreamToFile(multipartFile.getInputStream(),	file);
+					return file.getPath();
+			
+			}else {
+				return "0";
+			}
+	
 	}
 
 

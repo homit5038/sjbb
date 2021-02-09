@@ -1,125 +1,180 @@
 <%@page import="com.xqx.frame.config.Config"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+         pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>系统</title>
-<meta http-equiv="Cache-Control" content="no-store"/>
-<meta http-equiv="Pragma" content="no-cache"/>
-<meta http-equiv="Expires" content="0"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<base target="${base_target==null?'_self':base_target }">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link href="${ctx}/resources/css/style-v1.css" rel="stylesheet">
-<link href="${ctx}/resources/bootstrap-3.3.5/css/bootstrap.css" rel="stylesheet">
-<script type="text/javascript" charset="utf-8"
-src="${ctx}/resources/js/jquery-1.12.1.min.js"></script>
-<script type="text/javascript">
-	$(function() {
-		$(document).keydown(function(event) {
-			if (event.keyCode == 13) {
-				$("#btnSignCheck").click();
-			}
-		});
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>系统</title>
+    <meta http-equiv="Cache-Control" content="no-store"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <base target="${base_target==null?'_self':base_target }">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link href="${ctx}/resources/css/style-v1.css" rel="stylesheet">
+    <link href="${ctx}/resources/bootstrap-3.3.5/css/bootstrap.css" rel="stylesheet">
+    <script type="text/javascript" charset="utf-8"
+            src="${ctx}/resources/js/jquery-1.12.1.min.js"></script>
+    <script type="text/javascript">
 
-		$("#btnSignCheck").click(function() {
-			submitForm();
-		});
-	});
-	function submitForm() {
-		var username = $("#j_username").val();
-		var password = $("#j_password").val();
-		var fCode = $("#fCode").val();
-		if (username == null || username == "") {
-			$("#error").text("请输入用户名");
-			return false;
-		} else {
-			$("#error").text("");
-		}
-		if (password == null || password == "") {
-			$("#error").text("请输入密码");
-			return false;
-		} else {
-			$("#error").text("");
-		}
-		if (fCode == null || fCode == "") {
-			$("#error").text("请输入验证码");
-			return false;
-		} else {
-			$("#error").text("");
-		}
-		$.post("${ctx}/validateCode", {
-			fCode : fCode
-		}, function(data) {
-			if (data == "ok") {
-				$("#loginForm").submit();
-			} else {
-				$("#error").text("验证码错误");
-				loadimage();
-				return false;
-			}
-		});
-	}
+        $(function() {
+            $(document).keydown(function(event) {
+                if (event.keyCode == 13) {
+                    $("#btnSignCheck").click();
+                }
+            });
 
-	function loadimage() {
-		document.getElementById("randImage").src = "${ctx}/image.jsp?"
+
+            $("#btnSignCheck").click(function() {
+                submitForm();
+            });
+        });
+
+
+        function submitForm() {
+            var username = $("#j_username").val();
+            var password = $("#j_password").val();
+            var fCode = $("#fCode").val();
+            if (username == null || username == "") {
+                $("#error").text("请输入用户名");
+                return false;
+            } else {
+                $("#error").text("");
+            }
+            if (password == null || password == "") {
+                $("#error").text("请输入密码");
+                return false;
+            } else {
+                $("#error").text("");
+            }
+            if (fCode == null || fCode == "") {
+                $("#error").text("请输入验证码");
+                return false;
+            } else {
+                $("#error").text("");
+            }
+            $.post("${ctx}/validateCode", {
+                fCode : fCode
+            }, function(data) {
+                if (data == "ok") {
+                    //$("#loginForm").submit();
+
+
+
+
+
+                    $.ajax({
+                        type:"post",
+                        url:"auth/login",
+                        dataType:"json",
+                        async:true,
+                        headers:{
+                            Authorization:''
+                        },
+                        data:$("#loginForm").serialize(),
+                        success:function(data, textStatus, jqXHR){
+                            console.log(jqXHR)
+                            //alert(data.success);
+                            if(data.status==1){
+                                top.location.href = "kindergarten/selectList";
+                                if(data.redirect){
+                                    top.location.href = "kindergarten/selectList";
+                                }else{
+                                    toastr.info(data.info);
+                                }
+                            }else{
+                                alert(data.msg);
+                            }
+                        },
+                        error:function (XMLHttpRequest, textStatus, errorThrown){
+                            if(textStatus=="timeout"){
+                                alert("响应超时，请稍后重试");
+                            }else{
+                                alert("登录异常，请稍后重试");
+                            }
+                        }
+                    });
+
+
+
+
+
+
+
+
+
+                } else {
+                    $("#error").text("验证码错误");
+                    loadimage();
+                    return false;
+                }
+            });
+        }
+        function changImage(){
+            document.getElementById("randomimage").src = "${ctx }/randomcode?nocache="+Math.random();
+        }
+        /* 	function loadimage() {
+                document.getElementById("randImage").src = "${ctx}/image.jsp?"
 				+ Math.random();
 		//alert(document.getElementById("randImage").src.text);
 		//document.getElementById("rand").value = "image.jsp?"+Math.random();
-	}
-</script>
+	} */
+    </script>
 </head>
 <body>
 <div class="container" style="margin-top: 20px;width:1122px">
 
     <div class="row" style="margin-top: 20px;">
         <div class="col-md-8">
-            <div class="flexslider">
-                <ul class="slides">
-                    <li style="background:url(${ctx}/resources/images/banner1.png) 50% 0 no-repeat;"></li>
-                    <li style="background:url(${ctx}/resources/images/222.png) 50% 0 no-repeat;"></li>
-                </ul>
-            </div>
+            <%--<div class="flexslider">--%>
+            <%--<ul class="slides">--%>
+            <%--<li style="background:url(${ctx}/resources/images/banner1.png) 50% 0 no-repeat;"></li>--%>
+            <%--<li style="background:url(${ctx}/resources/images/222.png) 50% 0 no-repeat;"></li>--%>
+            <%--</ul>--%>
+            <%--</div>--%>
         </div>
         <div class="col-md-4">
             <div class="panel panel-default" >
-   
+
                 <div class="panel-body" style="padding: 40px 20px;">
-                    <form action="j_spring_security_check" id="loginForm" method="post" >
+                    <!-- <form action=j_spring_security_check id="loginForm" method="post" > -->
+                    <form  id="loginForm" onsubmit="submitForm();return false;" method="post" >
                         <h4 class="login-title">登录</h4>
-                       
+
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon large"><span class="glyphicon glyphicon-user"></span></div>
-                                <input type="text" placeholder="输入用户名" id="j_username" name="j_username" value="" class="form-control large">
+                                <input type="text" placeholder="输入用户名" id="j_username" name="username" value="" class="form-control large">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon large"><span class="glyphicon glyphicon-lock"></span></div>
-                                <input type="password" id="j_password" name="j_password" placeholder="输入密码" class="form-control large">
-                            
+                                <input type="password" id="j_password" name="password" placeholder="输入密码" class="form-control large">
+
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon large"><span class="glyphicon glyphicon-eye-open"></span></div>
                                 <input type="text" name="fCode" placeholder="验证码" id="fCode" style="width:30%" class="form-control large">
-                            <img alt="code..." name="randImage"
-									id="randImage" src="${ctx}/image.jsp" width="70" height="50"
-									border="1" align="middle" onclick="javascript:loadimage();"
-									style="cursor: pointer;" />
-                            
+
+                                <img src="${ctx }/randomcode" id="randomimage" onclick="changImage();" alt="看不清 点击换图">
+
+                                <%--              <img alt="code..." name="randImage"
+                                                     id="randImage" src="${ctx}/image.jsp" width="70" height="50"
+                                                     border="1" align="middle" onclick="javascript:loadimage();"
+                                                     style="cursor: pointer;" /> --%>
+
                             </div>
                         </div>
-                        
+
                         <div class="checkbox" style="text-align: right;">
-	                       	<span style="color:red" id="error"><b>	${SPRING_SECURITY_LAST_EXCEPTION.message}</b></span>
-                        
+                            <span style="color:red" id="error"><b>	${SPRING_SECURITY_LAST_EXCEPTION.message}</b></span>
+
                         </div>
                         <input type="hidden" name="referer" value="http://manage.linktrust-edu.com/linktrust/sys/site/spacetologin" />
                         <input class="btn btn-danger btn-lg" type="button" id="btnSignCheck" style="width:100%;" value="登 陆">
@@ -138,12 +193,12 @@ src="${ctx}/resources/js/jquery-1.12.1.min.js"></script>
 <!-- 渐隐轮播图 文件 -->
 <script type="text/javascript" src="${ctx}/resources/js/jquery.flexslider-min.js?version=1.0"></script>
 <script type="text/javascript">
-$(document).ready(function(){
-    $('.flexslider').flexslider({
-        directionNav: true,
-        pauseOnAction: false
+    $(document).ready(function(){
+        $('.flexslider').flexslider({
+            directionNav: true,
+            pauseOnAction: false
+        });
     });
-});
 </script>
 </body>
 </html>

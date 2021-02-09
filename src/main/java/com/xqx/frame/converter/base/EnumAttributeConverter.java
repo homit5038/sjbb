@@ -14,7 +14,7 @@ public abstract class EnumAttributeConverter<X extends ConvertedEnum<Y>, Y>
 {
     @Override
     public final Y convertToDatabaseColumn(X x) {
-        if(ObjectUtils.isEmpty(x)){
+        if(ObjectUtils.isEmpty(new ConvertedEnum[]{x})){
             return null;
         }
         return x.toDbValue();

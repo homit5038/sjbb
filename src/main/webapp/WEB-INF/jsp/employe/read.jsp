@@ -46,7 +46,7 @@
 				</tr>
 				<tr>
 					<td>身份证号</td>
-					<td colspan="4">${employe.jobNumber}</td>
+					<td colspan="4" align="left">${employe.jobNumber}</td>
 				</tr>
 				<tr>
 					<td>学历</td>
@@ -62,13 +62,13 @@
 				</tr>
 				<tr>
 					<td>毕业时间</td>
-					<td></td>
+					<td>${employe.beginToWorkDate}</td>
 					<td colspan="2">参加工作时间</td>
 					<td></td>
 				</tr>
                  <tr>
 					<td>通讯地址</td>
-					<td colspan="5">${employe.phoneNum}</td>
+					<td colspan="5">${employe.dwellingPlace}</td>
 				</tr>
                  <tr>
 					<td>联系电话</td>
@@ -105,7 +105,7 @@
 				</tr>
 				<tr>
 					<td>入职时间</td>
-					<td>2018-09-05</td>
+					<td>${employe.inGartenDate}</td>
 					<td>试用时间</td>
 					<td></td>
 					<td>转正时间</td>

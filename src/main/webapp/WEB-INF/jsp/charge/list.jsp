@@ -2,18 +2,29 @@
 	pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
+
 <html>
 <head>
 <jsp:include page="/WEB-INF/jsp/public/header.jsp"></jsp:include>
+<link href="${ctx}/resources/zui/lib/datetimepicker/datetimepicker.min.css" rel="stylesheet">
+<script src="${ctx}/resources/zui/lib/datetimepicker/datetimepicker.min.js"></script>
 <script type="text/javascript">
-
-
-$(function(){
-	
-	
-	
+$(function(){ 
+	$(".form-date").datetimepicker(
+			{
+			    language:  "zh-CN",
+			    weekStart: 1,
+			    todayBtn:  1,
+			    autoclose: 1,
+			    todayHighlight: 1,
+			    startView: 2,
+			    minView: 2,
+			    forceParse: 0,
+			    format: "yyyy-mm-dd"
+			});
 })
 
 	function chargtext(str) {
@@ -68,8 +79,8 @@ $(function(){
 					<tr height="40px">
 						<td align="right" width="100px">姓名：</td>
 						<td align="left" width="100px" >
-						<input type="text" name="employeName" value="${name}"
-							style="width: 180px" class="form-control" placeholder="请输入专家姓名">
+						<input type="text" name="childName" value="${name}"
+							style="width: 180px" class="form-control" placeholder="请输入姓名">
 							</td>
 						
 						
@@ -78,15 +89,10 @@ $(function(){
 						<td align="right" >进园时间：</td>
 						<td align="left">
 						
-						
 						<input type="text" name="beginTime"
-							id="beginTime" value="${timeb}" style="width: 122px"
-							onclick="SelectDate(this,'yyyy-MM-dd')" readonly="readonly"
-							class="form-control">-
+							id="beginTime" value="${timeb}" style="width: 122px" class="form-control form-date" >-
 							<input type="text" name="endTime" 
-							id="endTime" value="${payableDsate}" style="width: 122px"
-							onclick="SelectDate(this,'yyyy-MM-dd')" readonly="readonly"
-							class="form-control">
+							id="endTime" value="${payableDsate}" style="width: 122px" class="form-control form-date">
 							
 							</td>
 						<td align="left">
@@ -110,18 +116,18 @@ $(function(){
 					<c:otherwise>
 						<thead>
 							<tr>
-								<th width="150px">操&nbsp;&nbsp;&nbsp;作</th>
+								<th width="190px">操&nbsp;&nbsp;&nbsp;作</th>
 								<th>姓名</th>
-<th>付款方式</th>
-<th>找零</th>
-<th>实付金额</th>
-<th>应付金额</th>
-<th>小票打印日期</th>
-<th>付款日期</th>
-<th>收费详情</th>
-<th>收费项</th>
-<th>备注</th>
-
+								<th>年级</th>
+								<th>班级</th>
+								<th>付款方式</th>
+								<th>实付金额</th>
+								<th>应付金额</th>
+								<th>小票打印日期</th>
+								<th>付款日期</th>
+								<th>收费详情</th>
+						<!-- 		<th>收费项</th> -->
+								<th>备注</th>
 							</tr>
 						</thead>
 						<c:forEach items="${data.content }" var="data">
@@ -130,22 +136,25 @@ $(function(){
 								   
 								   <a class="btn btn-primary  btn-xs" href="javascript:void(0)" onclick="del('${data.id}')">删除 </a>
 								   <a class="btn btn-primary  btn-xs"  target="_blank" href="${data.id}/read">查看详细</a>
+								   <a class="btn btn-primary  btn-xs"  target="_blank" href="${data.id}/read">收费项目</a>
 								</td>
 								
-<td>${data.children.childName}</td>						
+<td>${data.children.childName}</td>
+<td>${data.children.grade.gradename}</td>
+<td>${data.children.classe.classesname}</td>					
 <td>${data.paytype.describe}</td>
-<td>${data.chargereturn }</td>
 <td>${data.chargerealpay}</td>
 <td>${data.chargeshouldpay}</td>
 <td>${data.timeb}</td>
 <td>${data.payableDsate}</td>
 
-<td id="chargtext">${data.chargConnectiontext}
-
-
-
+<td id="chargtext">
+<c:set value="${fn:split(data.chargConnectiontext,',')}" var="str1"/>
+<c:forEach items="${str1}" var="s">
+${s} 
+</c:forEach>
 </td>
-<td>${data.chargConnection}</td>				
+<%-- <td>${data.chargConnection}</td>		 --%>		
 <td>${data.remarks}</td>			
 
 
