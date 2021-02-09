@@ -1,50 +1,50 @@
 package com.xqx.frame.web.controller;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.xqx.frame.config.Config;
+import com.xqx.frame.dao.TChildrenDao;
+import com.xqx.frame.dao.TClasseDao;
+import com.xqx.frame.dao.TIcketTemplateDao;
+import com.xqx.frame.dao.TchargeItemDao;
+import com.xqx.frame.exception.ParameterCheckException;
+import com.xqx.frame.form.ChildrenQueryVO;
+import com.xqx.frame.form.PageQueryResult;
+import com.xqx.frame.model.*;
+import com.xqx.frame.model.query.childrenQuery;
+import com.xqx.frame.service.ChargeItemService;
+import com.xqx.frame.service.ChildrenService;
+import com.xqx.frame.service.FileService;
+import com.xqx.frame.service.GradeService;
+import com.xqx.frame.util.PubUtil;
+import com.xqx.frame.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.xqx.frame.config.Config;
-import com.xqx.frame.dao.TChildrenDao;
-import com.xqx.frame.dao.TClasseDao;
-import com.xqx.frame.dao.TchargeItemDao;
-import com.xqx.frame.exception.ParameterCheckException;
-import com.xqx.frame.model.SexType;
-import com.xqx.frame.model.TChargeItem;
-import com.xqx.frame.model.TChildren;
-import com.xqx.frame.model.TClasses;
-import com.xqx.frame.model.TEmploye;
-import com.xqx.frame.model.TGrade;
-import com.xqx.frame.service.ChildrenService;
-import com.xqx.frame.service.FileService;
-import com.xqx.frame.service.GradeService;
-import com.xqx.frame.util.PubUtil;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/children")
@@ -63,7 +63,11 @@ public class ChildrenController {
 
 	@Autowired
 	TchargeItemDao chargeItemDao;
+	@Autowired
+	ChargeItemService chargeItemService;
 	
+	@Autowired
+	TIcketTemplateDao ticketTemplateDao;
 	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
@@ -90,10 +94,19 @@ public class ChildrenController {
 	 * @param m
 	 * @return
 	 */
+
 	@RequestMapping(value = "/new",method=RequestMethod.GET)
-	public String newChildren(Model m){
+	public String newChildren(Model m,HttpServletRequest request){
 		
 		TChildren children = new TChildren();
+		Object topId=request.getSession().getAttribute("topId");
+		if (!Validator.isNull(topId)) {
+			long topIds=Long.valueOf(topId.toString());
+			TKindergarten kindergarten=new TKindergarten();
+			kindergarten.setId(topIds);
+			children.setKindergarten(kindergarten);
+		}
+		children.setChildSchoolId(childrenService.getSystemSequence("contractSequence"));
 		List<TGrade> grade=gradeService.findAll();
 		List<TClasses> classe=classesService.findAll();
 		List<TChargeItem> Itemlist=chargeItemDao.findAll();
@@ -107,19 +120,23 @@ public class ChildrenController {
 	}
 
 	/**
-	 * 新增专家
+	 * 新增学生
 	 * @param m
-	 * @param expert
 	 * @return
 	 * @throws ParameterCheckException
 	 * @throws IOException 
 	 */
 	
 	@RequestMapping(value = "/new",method=RequestMethod.POST)
-	public String newClass(Model m,@ModelAttribute("children") TChildren children,BindingResult bind, SessionStatus status,@RequestParam("photoDir") MultipartFile multipartFile) throws ParameterCheckException,IOException{
+	public String newClass(Model m,
+						   @ModelAttribute("children") TChildren children,BindingResult bind, SessionStatus status,@RequestParam("photoDir") MultipartFile multipartFile) throws ParameterCheckException,IOException{
+
 
 		children.setPhotoDir(fileservice.upphote(multipartFile));
-	
+		String chargConnection=children.getChargConnection();
+		if("".equals(chargConnection)&&chargConnection==null){
+			children.setChargConnection(children.getClasse().getChargeitem());
+		}
 		String saveMsg = childrenService.saveChildren(children);
 		if("exist".equals(saveMsg)){
 			m.addAttribute("msg", "exist");
@@ -130,8 +147,49 @@ public class ChildrenController {
 	}
 	
 	
-	
+	/**
+	 * 学生生日查询
+	 * @param m
+	 * @return
+	 * 
+	 */
 
+	@RequestMapping("/childbirthday")
+	public String childBirthDay(Model m,
+			//SessionStatus sessionStatus,
+			@PageableDefault(page = 0, size = 10,direction = Direction.DESC) Pageable p,HttpServletRequest request){
+	
+		String gid = request.getParameter("selectDate");
+		Page<TChildren> list = childrenService.findAll(gid,p);
+		System.out.println("-------------------55---"+list);
+		m.addAttribute("size", p.getPageSize());
+		m.addAttribute("page", p.getPageNumber());
+		m.addAttribute("num", list.getTotalElements());
+		m.addAttribute("data", list);
+		m.addAttribute("gid", gid);
+		return "/children/childBirthlist";
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping("/wxlist")
+	public Object wxlist(Integer page, Integer limit, childrenQuery query){
+		//String name = request.getParameter("employeName");
+		//System.out.println("========================="+p.getPageNumber());
+   
+		Page<TChildren> list = childrenService.findAllt(query,page - 1,limit);
+		//System.out.println("========================="+list.getContent().get(0).tsting());
+		return new PageQueryResult<>(list);
+
+	}
+
+
+	/**
+	 * 学生详细列表
+	 * @param m
+	 * @return
+	 * 
+	 */
 	@RequestMapping("/list")
 	public String childrenlist(Model m,
 			//SessionStatus sessionStatus,
@@ -141,31 +199,116 @@ public class ChildrenController {
 		String gid = request.getParameter("gid");
 		List<TClasses> classe=classesService.findAll();
 		List<TGrade> grade=gradeService.findAll();
-		m.addAttribute("name", name);
+		List<TIcketTemplate> ticketTemp= ticketTemplateDao.findAll();
+		
 	System.out.println("===================="+cid+"------"+gid);
 		//m.addAttribute("advLinks", user.getId());
 		//sessionStatus.setComplete();
-		
+	TChildren children = new TChildren();
+	   
 		Page<TChildren> list = childrenService.findAll(name,cid,gid,p);
 		m.addAttribute("classe", classe);
 		m.addAttribute("grade", grade);
+		 m.addAttribute("ticketTemp", ticketTemp);
 		m.addAttribute("size", p.getPageSize());
 		m.addAttribute("page", p.getPageNumber());
 		m.addAttribute("num", list.getTotalElements());
 		m.addAttribute("data", list);
+		m.addAttribute("children", children);
 		m.addAttribute("method", "get");
 		return "/children/list";
 	}
+
+	
+
 	/**
-	 * 学生详细
+	 * 老生选择添加收据列表
 	 * @param m
 	 * @return
 	 * 
 	 */
+	@RequestMapping("/selectAllChildren")
+	public String selectchildrenlist(Model m,HttpServletRequest request){
+		String name = request.getParameter("searchName");
+	   
+		List<TChildren> list = childrenService.findChildrenByName(name);
+		m.addAttribute("children", list);
+	
+		return "/children/sellist";
+	}
+	/**
+	 * 输入学生姓名查询学生
+	 * @param m
+	 * @return
+	 * 
+	 */
+	@ResponseBody
+	@RequestMapping("/queryChildren")
+	public Object querychildrenlist(Model m,HttpServletRequest request){
+		String name = request.getParameter("searchName");
+	   
+		List<TChildren> list = childrenService.findBychildrennamejson(name);
+
+	
+		return list;
+	}
+	
+	/**
+	 * 输入学生姓名查询学生
+	 * @param m
+	 * @return
+	 * 
+	 */
+	@ResponseBody
+	@RequestMapping("/selectChildById")
+	public ChildrenQueryVO selectChildById(Model m,HttpServletRequest request){
+		String childId = request.getParameter("childId");
+		ChildrenQueryVO list = childrenService.findChildrensById(Long.valueOf(childId));
+		return list;
+	}
+	
+
+	
+
+	/**
+	 * cs学生列表
+	 * @param m
+	 * @return
+	 * 
+	 */
+	@RequestMapping("/listy")
+	public String childrenlisty(Model m,
+			//SessionStatus sessionStatus,
+			@PageableDefault(page = 0, size = 10,direction = Direction.DESC) Pageable p,HttpServletRequest request){
+		String name = request.getParameter("childName");
+		String cid = request.getParameter("cid");
+		String gid = request.getParameter("gid");
+		List<TClasses> classe=classesService.findAll();
+		List<TGrade> grade=gradeService.findAll();
+		List<TIcketTemplate> ticketTemp= ticketTemplateDao.findAll();
+		
+	System.out.println("===================="+cid+"------"+gid);
+		//m.addAttribute("advLinks", user.getId());
+		//sessionStatus.setComplete();
+	TChildren children = new TChildren();
+	   
+		Page<TChildren> list = childrenService.findAll(name,cid,gid,p);
+		m.addAttribute("classe", classe);
+		m.addAttribute("grade", grade);
+		 m.addAttribute("ticketTemp", ticketTemp);
+		m.addAttribute("size", p.getPageSize());
+		m.addAttribute("page", p.getPageNumber());
+		m.addAttribute("num", list.getTotalElements());
+		m.addAttribute("data", list);
+		m.addAttribute("children", children);
+		m.addAttribute("method", "get");
+		return "/children/listy";
+	}
+
 	
 	
 	/**
-	 * 学生收费设置
+	 * 学生信息
 	 * @param m
 	 * @return
 	 * 
@@ -174,12 +317,47 @@ public class ChildrenController {
 	@RequestMapping(value = "/{id}/read")
 	public String readChildren(@PathVariable Long id, Model m) {
 		TChildren children = childrenService.findChildrenById(id);
+		
+		String chargConnection = children.getChargConnection();
+
+		List<TChargeItem> chargeitem = new ArrayList<TChargeItem>();
+		if(!"".equals(chargConnection)&&chargConnection!=null){
+			String[] ss = chargConnection.split(",");
+			for(int i=0;i<ss.length;i++){
+				chargeitem.add(chargeItemService.findChargeitemById(Long.valueOf(ss[i])));
+			}
+		}
+		
+		m.addAttribute("chargeitem", chargeitem);
+	
 		m.addAttribute("children", children);
 		m.addAttribute("sexType", SexType.values());
 		return "/children/read";
 	}
 	
-	
+	/**
+	 * 学生收费设置
+	 * @param m
+	 * @return
+	 * @throws Exception 
+	 * 
+	 */
+
+	@RequestMapping(value = "/export")
+	public ResponseEntity<byte[]> export(HttpServletRequest request, HttpServletResponse response, ModelMap map, Model m) throws Exception {
+		
+		List<TChildren> children=childrenDao.findAll();
+		
+		List<Map<String, Object>> result = childrenService.Childrenstatistics();
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+
+		HttpHeaders headers = new HttpHeaders();  
+
+		
+		headers.add("Content-Disposition","attachment;filename=" + format.format(new Date()) + ".xls");  
+		return new ResponseEntity<byte[]>(childrenService.exportPersonnelsExcel(result).toByteArray(), headers, HttpStatus.OK);
+	}
 
 	/**
 	 * 显示图片
@@ -224,7 +402,12 @@ public class ChildrenController {
 	public String childrenEdit(@PathVariable Long id, Model m) {
 		
 		if (!PubUtil.isEmpty(id) && -1L != id) {
-			m.addAttribute("children", childrenService.findChildrenById(id));
+			TChildren children=childrenService.findChildrenById(id);
+		    if(StringUtils.isEmpty(children.getChildSchoolId())){
+		    	children.setChildSchoolId(childrenService.getSystemSequence("contractSequence"));
+		    }
+			
+			m.addAttribute("children", children);
 		} else {
 			m.addAttribute("children", new TChildren());
 		}
@@ -253,7 +436,7 @@ public class ChildrenController {
 		//	return "employe/createOrUpdate";
 		//}
 		TChildren childrent = childrenService.findChildrenById(id);
-		if (!photoDir.getOriginalFilename().isEmpty()) {
+		if (!photoDir.getOriginalFilename().isEmpty()||childrent.getPhotoDir().isEmpty()) {
 			
 				try {
 					 children.setPhotoDir(fileservice.upphote(photoDir));
@@ -283,9 +466,15 @@ public class ChildrenController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/{id}/del")
-	public String deleteEmploye(@PathVariable Long id, Model m) throws ParameterCheckException {
-		childrenService.deleteChildren(id);
-		return "ok";
+	public String deleteEmploye(@PathVariable Long id) throws ParameterCheckException {
+		try {
+			 childrenService.deleteChildren(id);
+			 return "ok";
+		}catch(Exception e) {
+			e.printStackTrace();
+			 return "no";
+		}
+		
 	}
 
 }
